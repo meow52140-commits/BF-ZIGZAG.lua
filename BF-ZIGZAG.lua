@@ -1,7 +1,7 @@
 --========================================================
--- BIGFROOT THAI - ZIGZAG V2.5.3 FULL MERGED
+-- BIGFROOT THAI - ZIGZAG V2.6 HALLOWEEN FULL MERGED
 -- BASE: USER-PROVIDED WORKING V2.5.2 FIXED (V2.5.1)
--- BF v1.8.2 RACE / SHOOTING STARS translation additions
+-- BF v1.8.2 RACE + BF v1.8.6 HALLOWEEN translation additions
 -- Translator engine, source URL, theme and old mappings preserved
 -- No RenderStepped / no permanent full-scan loop
 --========================================================
@@ -959,6 +959,43 @@ local T={
 ["+ Fixed Enchanted eggs going back to their nest"]="+ แก้ไขไข่มนตรากลับรัง",
 ["+ Fixed Ultra FPS Boost deleting the race"]="+ แก้ไขโหมดเพิ่ม FPS สูงสุดที่ทำให้การแข่งขันหายไป",
 ["+ Fixed black screen after races"]="+ แก้ไขหน้าจอดำหลังการแข่งขัน",
+
+--========================================================
+-- BF V1.8.6 - HALLOWEEN UPDATE (ADDED ONLY)
+-- Exact names as shown on Halloween screen; no changes to BF logic.
+--========================================================
+["Halloween"]="ฮาโลวีน",
+["Halloween Dimension"]="มิติฮาโลวีน",
+["Open Now"]="เปิดอยู่ตอนนี้",
+["Dimension"]="มิติ",
+["Train"]="รถไฟ",
+["Candy Corn"]="ข้าวโพดลูกกวาด",
+["Souls"]="วิญญาณ",
+["Tickets"]="ตั๋ว",
+["Auto Halloween Eggs"]="ออโต้เก็บไข่ฮาโลวีน",
+["Steal Rarities"]="ระดับความหายากของไข่ที่จะขโมย",
+["Auto Kill Monsters"]="ออโต้กำจัดมอนสเตอร์",
+["Auto Pumpkin Moon"]="ออโต้กิจกรรมพระจันทร์ฟักทอง",
+["Halloween Before Eggs"]="ให้ฮาโลวีนสำคัญกว่าการเก็บไข่",
+["Phantom Express"]="รถไฟปีศาจ Phantom Express",
+["Auto Ride The Train"]="ออโต้ขึ้นรถไฟ",
+["Auto Trade Souls"]="ออโต้แลกวิญญาณ",
+["Auto Ghouler"]="ออโต้ Ghouler",
+["Ghouler"]="Ghouler",
+["Pumpkin Boss"]="บอสฟักทอง",
+["Auto Pumpkin Boss"]="ออโต้ต่อสู้บอสฟักทอง",
+["Auto Manor Key"]="ออโต้เก็บกุญแจคฤหาสน์",
+["Ghost Dog Quest"]="เควสต์สุนัขผี",
+["Auto Ghost Dog Quest"]="ออโต้ทำเควสต์สุนัขผี",
+["Auto Fish"]="ออโต้ตกปลา",
+["Candy Shop"]="ร้านขนมฮาโลวีน",
+["Auto Buy Halloween Egg"]="ออโต้ซื้อไข่ฮาโลวีน",
+
+-- These composite strings appear as one label in BF v1.8.6.
+-- Dynamic variants are handled separately in TranslateLine.
+["Dimension OPEN | Train OPEN | Ghouler - | Pumpkin Boss closed"]="มิติเปิด | รถไฟเปิด | Ghouler - | บอสฟักทองปิด",
+["Candy Corn 200 | Souls 0 | Tickets 0"]="ข้าวโพดลูกกวาด 200 | วิญญาณ 0 | ตั๋ว 0",
+
 }
 
 --========================================================
@@ -1487,6 +1524,48 @@ local function TranslateLine(line)
     end
 
     --====================================================
+    -- BF V1.8.6 HALLOWEEN DYNAMIC STATUS
+    -- These two summary lines update while the game runs.
+    -- Keep existing generic translation rules untouched.
+    --====================================================
+    local dimensionState,trainState,ghoulerState,bossState=
+        plain:match(
+            "^Dimension%s+([^|]+)%s*|%s*Train%s+([^|]+)%s*|%s*Ghouler%s+([^|]+)%s*|%s*Pumpkin Boss%s+([^|]+)$"
+        )
+
+    if dimensionState then
+        local states={
+            ["open"]="เปิด",
+            ["closed"]="ปิด",
+            ["waiting"]="กำลังรอ",
+            ["active"]="ทำงาน",
+            ["inactive"]="ไม่ทำงาน",
+        }
+        local function State(s)
+            s=s:match("^%s*(.-)%s*$")
+            return states[string.lower(s)] or s
+        end
+        return lead
+            .."มิติ"..State(dimensionState)
+            .." | รถไฟ"..State(trainState)
+            .." | Ghouler "..State(ghoulerState)
+            .." | บอสฟักทอง"..State(bossState)
+            ..tail
+    end
+
+    local candyCorn,souls,tickets=
+        plain:match(
+            "^Candy Corn%s+([%d,%.]+)%s*|%s*Souls%s+([%d,%.]+)%s*|%s*Tickets%s+([%d,%.]+)$"
+        )
+    if candyCorn then
+        return lead
+            .."ข้าวโพดลูกกวาด "..candyCorn
+            .." | วิญญาณ "..souls
+            .." | ตั๋ว "..tickets
+            ..tail
+    end
+
+    --====================================================
     -- DYNAMIC
     --====================================================
 
@@ -1865,6 +1944,21 @@ local function TranslateLine(line)
         {"Golden","ทอง"},
         {"Silver","เงิน"},
 
+        -- BF v1.8.6 HALLOWEEN (decorated/extended menu text)
+        {"Auto Halloween Eggs","ออโต้เก็บไข่ฮาโลวีน"},
+        {"Auto Kill Monsters","ออโต้กำจัดมอนสเตอร์"},
+        {"Auto Pumpkin Moon","ออโต้กิจกรรมพระจันทร์ฟักทอง"},
+        {"Halloween Before Eggs","ให้ฮาโลวีนสำคัญกว่าการเก็บไข่"},
+        {"Auto Ride The Train","ออโต้ขึ้นรถไฟ"},
+        {"Auto Trade Souls","ออโต้แลกวิญญาณ"},
+        {"Auto Ghouler","ออโต้ Ghouler"},
+        {"Auto Pumpkin Boss","ออโต้ต่อสู้บอสฟักทอง"},
+        {"Auto Manor Key","ออโต้เก็บกุญแจคฤหาสน์"},
+        {"Auto Ghost Dog Quest","ออโต้ทำเควสต์สุนัขผี"},
+        {"Auto Buy Halloween Egg","ออโต้ซื้อไข่ฮาโลวีน"},
+        {"Auto Fish","ออโต้ตกปลา"},
+        {"Steal Rarities","ระดับความหายากของไข่ที่จะขโมย"},
+
         -- BF V1.7.9 ENCHANTED
         {"Auto Wisp Quests","ออโต้ทำเควสต์ Wisp"},
         {"Steal Wisp Quest Eggs","ขโมยไข่เควสต์ Wisp"},
@@ -1958,6 +2052,11 @@ local SIGNATURES={
 "auto load selected",
 "dr. scramble",
 "big egg filter",
+"auto halloween eggs",
+"auto ride the train",
+"auto pumpkin boss",
+"auto ghost dog quest",
+"auto buy halloween egg",
 }
 
 local function IsBFSignature(text)
@@ -2589,7 +2688,7 @@ end
 --========================================================
 
 print(
-    "✅ ZIGZAG BF Translator V2.5.3 RACE UPDATE armed"
+    "✅ ZIGZAG BF Translator V2.6 HALLOWEEN UPDATE armed"
 )
 
 --========================================================
@@ -2677,7 +2776,7 @@ task.delay(
                 "SendNotification",
                 {
                     Title="🥭 BigFroot ภาษาไทย",
-                    Text="ZIGZAG V2.5.3 | Race + Shooting Stars",
+                    Text="ZIGZAG V2.6 | Halloween + Race",
                     Duration=5
                 }
             )
@@ -2690,12 +2789,15 @@ task.delay(
 --========================================================
 
 print("========================================")
-print("✅ BIGFROOT THAI - ZIGZAG V2.5.3 FULL MERGED")
+print("✅ BIGFROOT THAI - ZIGZAG V2.6 HALLOWEEN FULL MERGED")
 print("✅ WORKING V2.5.2 BASE PRESERVED")
 print("✅ V2.4 TRANSLATOR ENGINE PRESERVED")
 print("✅ BFLoader INCLUDED")
 print("✅ BF V1.7.9 ENCHANTED UPDATE")
 print("✅ BF V1.8.2 RACE TRANSLATIONS")
+print("✅ BF V1.8.6 HALLOWEEN TRANSLATIONS")
+print("✅ PHANTOM EXPRESS / PUMPKIN BOSS / GHOST DOG / CANDY SHOP")
+print("✅ HALLOWEEN DYNAMIC STATUS / CURRENCY")
 print("✅ RACE RALLY / RACE REWARDS / SHOOTING STARS")
 print("✅ WISP / BUTTERFLIES / ESSENCE")
 print("✅ TRADE UP / BANJO CRICKET")
