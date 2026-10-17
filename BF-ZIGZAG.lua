@@ -1,7 +1,9 @@
 --========================================================
--- BIGFROOT THAI - ZIGZAG V2.4 MERGED
--- Working V2 Engine + V2.3 + Enchanted Update
--- BF v1.7.9
+-- BIGFROOT THAI - ZIGZAG V2.5.3 FULL MERGED
+-- BASE: USER-PROVIDED WORKING V2.5.2 FIXED (V2.5.1)
+-- BF v1.8.2 RACE / SHOOTING STARS translation additions
+-- Translator engine, source URL, theme and old mappings preserved
+-- No RenderStepped / no permanent full-scan loop
 --========================================================
 
 local Players=game:GetService("Players")
@@ -18,9 +20,48 @@ local CREDIT_TEXT="✦ แปลไทยโดย ZIGZAG"
 local CREDIT_COLOR=Color3.fromRGB(255,105,220)
 local CREDIT_STROKE=Color3.fromRGB(255,220,248)
 
+--========================================================
+-- ZIGZAG THEME
+--========================================================
+
+local ZIGZAG_THEME_ASSET=
+    "104570286698558"
+
+local ZIGZAG_THEME_JSON=[=[
+{
+  "Theme": {
+    "Glow": false,
+    "Colors": {
+      "Panel": "0f0818",
+      "Text": "f2eaff",
+      "Element": "241331",
+      "Risky": "e65757",
+      "Outline": "7a39e6",
+      "Hover": "341252",
+      "Background": "12091d",
+      "DimText": "b89ce0",
+      "Accent": "9a4dff"
+    },
+    "Icon": "rbxassetid://104570286698558",
+    "Wallpaper": {
+      "Transparency": 0.14,
+      "Image": "rbxassetid://104570286698558"
+    },
+    "ElementGlow": true,
+    "CardOpacity": 0.9
+  },
+  "blush": 1,
+  "Name": "ZIGZAG",
+  "Kind": "theme"
+}
+]=]
+
+local ZIGZAG_THEME_APPLIED=false
+local ZIGZAG_THEME_RUNNING=false
+local ZIGZAG_THEME_IMPORT_ATTEMPTED=false
 
 --========================================================
--- TRANSLATIONS
+-- TRANSLATIONS: ALL V2.5.2 MAPPINGS RETAINED
 --========================================================
 
 local T={
@@ -85,7 +126,6 @@ local T={
 ["Reset"]="รีเซ็ต",
 ["Clear"]="ล้าง",
 
-
 -- HOME
 ["Announcements"]="ประกาศ",
 ["Quick actions"]="คำสั่งด่วน",
@@ -112,7 +152,6 @@ local T={
 ["players"]="ผู้เล่น",
 ["key time"]="เวลาคีย์",
 ["Expires"]="หมดอายุ",
-
 
 -- AUTO STEAL
 ["Auto Steal"]="ออโต้ขโมย",
@@ -144,6 +183,12 @@ local T={
 ["Return To"]="กลับไปยัง",
 ["Plot Spawn"]="จุดเกิดในฐาน",
 
+-- V2.5.2 FIXED - EXACT DROPDOWN MAPPINGS
+["Plot Center"]="กลางฐาน",
+["Pen Area"]="พื้นที่คอก",
+["Start Area"]="พื้นที่เริ่มต้น",
+["1st Area (no claim)"]="พื้นที่แรก (ไม่ต้องเคลม)",
+
 ["Return To Last Position"]="กลับตำแหน่งล่าสุด",
 ["Return to Last Position"]="กลับตำแหน่งล่าสุด",
 
@@ -165,7 +210,6 @@ local T={
 
 ["Drop Carried Egg"]="ปล่อยไข่ที่กำลังถือ",
 ["Drop Held Egg"]="ปล่อยไข่ที่กำลังถือ",
-
 
 -- OP STUFF
 ["OP Stuffs"]="ฟังก์ชันพิเศษ",
@@ -192,7 +236,6 @@ local T={
 ["Walk Speed"]="ความเร็วเดิน",
 ["Fly Speed"]="ความเร็วบิน",
 ["Carry Speed"]="ความเร็วขณะถือไข่",
-
 
 -- FILTERS
 ["Auto Steal Filter"]="ตัวกรองออโต้ขโมย",
@@ -252,7 +295,6 @@ local T={
 ["No egg on the map matches the current filters."]=
 "ไม่มีไข่บนแผนที่ที่ตรงกับตัวกรองปัจจุบัน",
 
-
 -- AREA
 ["Abyss Ocean"]="มหาสมุทรอเวจี",
 ["Cherry Blossom"]="ซากุระ",
@@ -267,7 +309,6 @@ local T={
 ["Snow"]="หิมะ",
 ["Titan Temple"]="วิหารไททัน",
 ["Volcano"]="ภูเขาไฟ",
-
 
 -- EGGS
 ["Egg Automation"]="ระบบอัตโนมัติสำหรับไข่",
@@ -320,7 +361,6 @@ local T={
 ["Egg Sell Status"]="สถานะการขายไข่",
 ["Turn Auto Sell Eggs on."]="เปิดออโต้ขายไข่เพื่อเริ่มทำงาน",
 
-
 -- PROGRESSION
 ["Upgrades"]="อัปเกรด",
 
@@ -332,6 +372,8 @@ local T={
 
 ["Auto Treadmill Training"]="ออโต้ฝึกลู่วิ่ง",
 ["Auto Treadmill Upgrade"]="ออโต้อัปเกรดลู่วิ่ง",
+
+["Auto Admin Treadmill"]="ออโต้ลู่วิ่งแอดมิน",
 
 ["Trails"]="Trail",
 ["Trails To Buy"]="Trail ที่ต้องการซื้อ",
@@ -350,7 +392,6 @@ local T={
 ["Auto Claim Index Rewards"]="ออโต้รับรางวัล Index",
 
 ["Auto Claim Group Reward"]="ออโต้รับรางวัลกลุ่ม",
-
 
 -- VISUAL
 ["Performance"]="ประสิทธิภาพ",
@@ -375,7 +416,6 @@ local T={
 
 ["Only Mutated"]="เฉพาะที่กลายพันธุ์",
 ["Min KG"]="KG ขั้นต่ำ",
-
 
 -- FUSE
 ["Auto Fuse Selected"]="ออโต้ผสมตัวที่เลือก",
@@ -414,7 +454,6 @@ local T={
 ["Skeleton Horse"]="ม้าโครงกระดูก (Skeleton Horse)",
 ["World Burner"]="เวิลด์เบิร์นเนอร์ (World Burner)",
 
-
 -- CONTEST
 ["Contest Players"]="แย่งไข่จากผู้เล่น",
 
@@ -427,7 +466,6 @@ local T={
 ["Forward Offset (studs)"]="ระยะด้านหน้า (studs)",
 
 ["Give Up After (seconds)"]="ยกเลิกหลังจาก (วินาที)",
-
 
 -- DR SCRAMBLE
 ["Dr. Scramble"]="Dr. Scramble",
@@ -465,7 +503,7 @@ local T={
 ["Auto Trade In"]="ออโต้แลก",
 
 ["Banners (empty = any)"]="Banner (ว่าง = ทั้งหมด)",
-["Banner (empty = any)"]="Banner (ว่าง = ทั้งหมด)",
+["Banners (empty = any)"]="Banner (ว่าง = ทั้งหมด)",
 
 ["Biohazard Pets"]="สัตว์เลี้ยง Biohazard",
 
@@ -493,7 +531,6 @@ local T={
 "รายได้ขั้นต่ำของชาร์ด $/วิ (0 = ไม่จำกัด)",
 
 ["Shards"]="ชาร์ด",
-
 
 --========================================================
 -- BF V1.7.9 - ENCHANTED UPDATE
@@ -561,7 +598,6 @@ local T={
 ["Auto Banjo Cricket"]=
 "ออโต้จิ้งหรีดแบนโจ",
 
-
 -- PETS
 ["Income"]="รายได้",
 
@@ -598,7 +634,6 @@ local T={
 
 ["Sell Delay (per sale, pets + eggs)"]=
 "เวลาหน่วงการขาย (ต่อครั้ง สัตว์เลี้ยง + ไข่)",
-
 
 -- SETTINGS MENU
 ["Menu"]="เมนู",
@@ -644,7 +679,6 @@ local T={
 ["Stars"]="ดาว",
 ["Leaves"]="ใบไม้",
 
-
 -- WALLPAPER / ICON / PATTERN
 ["Risky"]="อันตราย",
 
@@ -683,7 +717,6 @@ local T={
 
 ["Save theme"]="บันทึกธีม",
 
-
 -- CONFIG
 ["config name"]="ชื่อคอนฟิก",
 
@@ -703,7 +736,6 @@ local T={
 ["share"]="แชร์",
 
 ["paste a config code..."]="วางโค้ดคอนฟิก...",
-
 
 -- THEME
 ["Preset"]="พรีเซ็ต",
@@ -752,7 +784,6 @@ local T={
 
 ["Inactive Text"]="ข้อความที่ไม่ได้เลือก",
 
-
 -- WEBHOOK
 ["Enable Webhook"]="เปิดใช้งาน Webhook",
 
@@ -781,7 +812,6 @@ local T={
 ["Min Fuse Result $/s (0 = every fuse)"]=
 "ผลผสมขั้นต่ำ $/วิ (0 = ทุกการผสม)",
 
-
 -- MUTATION OPTIONS
 ["Boss"]="บอส",
 ["Golden"]="ทอง",
@@ -789,7 +819,6 @@ local T={
 ["Sakura"]="ซากุระ",
 ["Scrambled"]="สแครมเบิล",
 ["Silver"]="เงิน",
-
 
 -- DASHBOARD
 ["Report To Dashboard"]="รายงานไปยังแดชบอร์ด",
@@ -812,7 +841,6 @@ local T={
 
 ["3. Paste it above, then turn on Report To Dashboard."]=
 "3. วางคีย์ด้านบน แล้วเปิด รายงานไปยังแดชบอร์ด",
-
 
 -- OLD BF / GREAT BLOOM
 ["Great Bloom"]="Great Bloom",
@@ -848,7 +876,6 @@ local T={
 
 ["Prediction is patched"]="ระบบคาดการณ์ถูกแก้แล้ว",
 
-
 -- CONFIG OLD
 ["Create Config"]="สร้างคอนฟิก",
 ["Delete Config"]="ลบคอนฟิก",
@@ -875,7 +902,6 @@ local T={
 
 ["Import Config"]="นำเข้าคอนฟิก",
 
-
 -- RARITIES
 ["Common"]="ธรรมดา",
 ["Uncommon"]="ไม่ธรรมดา",
@@ -896,8 +922,44 @@ local T={
 ["Titan"]="ไททัน",
 ["Rainbow"]="เรนโบว์",
 
+--========================================================
+-- BF V1.8.2 - RACE / SHOOTING STARS UPDATE (ADDED ONLY)
+--========================================================
+["Race"]="การแข่งขัน",
+["Race Rally"]="การแข่งขันแรลลี่",
+["Auto Join Race Rally"]="เข้าร่วมการแข่งขันแรลลี่อัตโนมัติ",
+["Prioritize Race Over Eggs"]="ให้การแข่งขันสำคัญกว่าการเก็บไข่",
+["Auto Race"]="แข่งขันอัตโนมัติ",
+["Race Autopilot"]="ระบบขับแข่งขันอัตโนมัติ",
+["Race Speed"]="ความเร็วในการแข่งขัน",
+["No race open -- waiting."]="ยังไม่มีการแข่งขัน — กำลังรอ",
+["No race open — waiting."]="ยังไม่มีการแข่งขัน — กำลังรอ",
+["No race open – waiting."]="ยังไม่มีการแข่งขัน — กำลังรอ",
+["No race open - waiting."]="ยังไม่มีการแข่งขัน — กำลังรอ",
+["Race Rewards"]="รางวัลการแข่งขัน",
+["Auto Claim Race Milestones"]="รับรางวัลการแข่งขันอัตโนมัติ",
+["Auto Buy From Race Shop"]="ซื้อของจากร้านแข่งขันอัตโนมัติ",
+["Nitro Mutation"]="การกลายพันธุ์ไนโตร",
+["Cash Booster"]="ตัวเพิ่มรายได้",
+["Speed Boost"]="เพิ่มความเร็ว",
+["Treadmill Boost"]="เพิ่มประสิทธิภาพลู่วิ่ง",
+["Racing Bat"]="ไม้ตีแข่งขัน",
+["Shooting Stars"]="ดาวตก",
+["Auto Catch Shooting Stars"]="เก็บดาวตกอัตโนมัติ",
+["Shooting ดาว"]="ดาวตก",
+["Auto Catch Shooting ดาว"]="เก็บดาวตกอัตโนมัติ",
+["+ Auto Race"]="+ แข่งขันอัตโนมัติ",
+["+ Race Autopilot"]="+ ระบบขับแข่งขันอัตโนมัติ",
+["+ Auto Join Race Rally"]="+ เข้าร่วมการแข่งขันแรลลี่อัตโนมัติ",
+["+ Prioritize Race Over Eggs"]="+ ให้การแข่งขันสำคัญกว่าการเก็บไข่",
+["+ Auto Claim Race Milestones"]="+ รับรางวัลการแข่งขันอัตโนมัติ",
+["+ Auto Buy From Race Shop"]="+ ซื้อของจากร้านแข่งขันอัตโนมัติ",
+["+ Auto Catch Shooting Stars"]="+ เก็บดาวตกอัตโนมัติ",
+["+ Auto Catch Shooting ดาว"]="+ เก็บดาวตกอัตโนมัติ",
+["+ Fixed Enchanted eggs going back to their nest"]="+ แก้ไขไข่มนตรากลับรัง",
+["+ Fixed Ultra FPS Boost deleting the race"]="+ แก้ไขโหมดเพิ่ม FPS สูงสุดที่ทำให้การแข่งขันหายไป",
+["+ Fixed black screen after races"]="+ แก้ไขหน้าจอดำหลังการแข่งขัน",
 }
-
 
 --========================================================
 -- LOOKUP
@@ -908,7 +970,6 @@ local LOWER={}
 for en,th in pairs(T) do
     LOWER[string.lower(en)]=th
 end
-
 
 --========================================================
 -- HELPERS
@@ -921,9 +982,7 @@ local function IsText(o)
         or o:IsA("TextBox")
 end
 
-
 local function GetRawText(o)
-
     if not IsText(o) then
         return ""
     end
@@ -939,9 +998,7 @@ local function GetRawText(o)
     return ""
 end
 
-
 local function Clean(text)
-
     if type(text)~="string" then
         return ""
     end
@@ -953,24 +1010,444 @@ local function Clean(text)
         or text
 end
 
-
 local function EscapePattern(s)
-
     return tostring(s)
         :gsub("([^%w])","%%%1")
 end
 
+--========================================================
+-- ZIGZAG THEME HELPERS
+-- ใช้ UI Import ของ BF เอง
+-- ไม่มี Loop ถาวร
+--========================================================
+
+local function IsThemeImportBox(object)
+    if not object
+        or not object:IsA("TextBox")
+    then
+        return false
+    end
+
+    local ok,placeholder=
+        pcall(function()
+            return object.PlaceholderText
+        end)
+
+    if not ok
+        or type(placeholder)~="string"
+    then
+        return false
+    end
+
+    local clean=
+        string.lower(
+            Clean(placeholder)
+        )
+
+    return
+        clean:find(
+            "paste a theme code",
+            1,
+            true
+        )~=nil
+        or
+        Clean(placeholder):find(
+            "วางโค้ดธีม",
+            1,
+            true
+        )~=nil
+end
+
+local function HasZigzagWallpaper(root)
+    if not root
+        or not root.Parent
+    then
+        return false
+    end
+
+    local function Check(object)
+        if not object:IsA("ImageLabel")
+            and not object:IsA("ImageButton")
+        then
+            return false
+        end
+
+        local ok,image=
+            pcall(function()
+                return object.Image
+            end)
+
+        return
+            ok
+            and type(image)=="string"
+            and image:find(
+                ZIGZAG_THEME_ASSET,
+                1,
+                true
+            )~=nil
+    end
+
+    if Check(root) then
+        return true
+    end
+
+    for _,object in ipairs(
+        root:GetDescendants()
+    ) do
+        if Check(object) then
+            return true
+        end
+    end
+
+    return false
+end
+
+local function GetButtonText(object)
+    if not object
+        or not object:IsA("TextButton")
+    then
+        return ""
+    end
+
+    local ok,text=
+        pcall(function()
+            return object.Text
+        end)
+
+    if ok
+        and type(text)=="string"
+    then
+        return Clean(text)
+    end
+
+    return ""
+end
+
+local function PressButton(button)
+    if not button
+        or not button.Parent
+    then
+        return false
+    end
+
+    if type(firesignal)=="function" then
+        local ok=
+            pcall(function()
+                firesignal(
+                    button.MouseButton1Click
+                )
+            end)
+
+        if ok then
+            return true
+        end
+    end
+
+    if type(getconnections)=="function" then
+        local ok,connections=
+            pcall(
+                getconnections,
+                button.MouseButton1Click
+            )
+
+        if ok
+            and type(connections)=="table"
+        then
+            local fired=false
+
+            for _,connection
+                in ipairs(connections)
+            do
+                pcall(function()
+                    if
+                        type(connection.Fire)
+                        =="function"
+                    then
+                        connection:Fire()
+                        fired=true
+                    elseif
+                        type(connection.Function)
+                        =="function"
+                    then
+                        connection.Function()
+                        fired=true
+                    end
+                end)
+            end
+
+            if fired then
+                return true
+            end
+        end
+    end
+
+    return false
+end
+
+local function IsThemeNavButton(object)
+    if not object:IsA("TextButton") then
+        return false
+    end
+
+    local text=
+        string.lower(
+            Clean(
+                GetButtonText(object)
+            )
+        )
+
+    return
+        text=="theming"
+        or text=="theme"
+        or text=="ธีม"
+end
+
+local function FindThemeNavButton(root)
+    for _,object in ipairs(
+        root:GetDescendants()
+    ) do
+        if IsThemeNavButton(object) then
+            return object
+        end
+    end
+
+    return nil
+end
+
+local function FindThemeImportBox(root)
+    if IsThemeImportBox(root) then
+        return root
+    end
+
+    for _,object in ipairs(
+        root:GetDescendants()
+    ) do
+        if IsThemeImportBox(object) then
+            return object
+        end
+    end
+
+    return nil
+end
+
+local function IsThemeImportButton(object)
+    if not object:IsA("TextButton") then
+        return false
+    end
+
+    local text=
+        string.lower(
+            Clean(
+                GetButtonText(object)
+            )
+        )
+
+    return
+        text=="import code"
+        or text=="import"
+        or text=="นำเข้าโค้ด"
+        or text=="นำเข้า"
+end
+
+local function FindThemeImportButton(
+    box,
+    root
+)
+    local current=
+        box.Parent
+
+    for _=1,6 do
+        if not current then
+            break
+        end
+
+        for _,object in ipairs(
+            current:GetDescendants()
+        ) do
+            if IsThemeImportButton(object) then
+                return object
+            end
+        end
+
+        if current==root then
+            break
+        end
+
+        current=
+            current.Parent
+    end
+
+    for _,object in ipairs(
+        root:GetDescendants()
+    ) do
+        if IsThemeImportButton(object) then
+            return object
+        end
+    end
+
+    return nil
+end
+
+local function FindZigzagButton(root)
+    for _,object in ipairs(
+        root:GetDescendants()
+    ) do
+        if object:IsA("TextButton") then
+            local text=
+                string.upper(
+                    Clean(
+                        GetButtonText(object)
+                    )
+                )
+
+            if text=="ZIGZAG" then
+                return object
+            end
+        end
+    end
+
+    return nil
+end
+
+local function TryApplyZigzagTheme(root)
+    if ZIGZAG_THEME_APPLIED
+        or ZIGZAG_THEME_RUNNING
+        or not root
+        or not root.Parent
+    then
+        return
+    end
+
+    if HasZigzagWallpaper(root) then
+        ZIGZAG_THEME_APPLIED=true
+
+        print(
+            "✅ ZIGZAG THEME ALREADY ACTIVE"
+        )
+
+        return
+    end
+
+    ZIGZAG_THEME_RUNNING=true
+
+    task.spawn(function()
+        local box=
+            FindThemeImportBox(root)
+
+        if not box then
+            local themeButton=
+                FindThemeNavButton(root)
+
+            if themeButton then
+                PressButton(
+                    themeButton
+                )
+
+                task.wait(0.25)
+
+                box=
+                    FindThemeImportBox(root)
+            end
+        end
+
+        if box
+            and not ZIGZAG_THEME_IMPORT_ATTEMPTED
+        then
+            ZIGZAG_THEME_IMPORT_ATTEMPTED=true
+
+            pcall(function()
+                box.Text=
+                    ZIGZAG_THEME_JSON
+            end)
+
+            if type(firesignal)=="function" then
+                pcall(function()
+                    firesignal(
+                        box.FocusLost,
+                        false
+                    )
+                end)
+            end
+
+            task.wait(0.1)
+
+            local importButton=
+                FindThemeImportButton(
+                    box,
+                    root
+                )
+
+            if importButton then
+                local pressed=
+                    PressButton(
+                        importButton
+                    )
+
+                if pressed then
+                    print(
+                        "✅ ZIGZAG THEME IMPORT SENT"
+                    )
+                else
+                    warn(
+                        "[ZIGZAG] พบปุ่ม Import แต่กดอัตโนมัติไม่ได้"
+                    )
+                end
+            else
+                warn(
+                    "[ZIGZAG] ยังไม่พบปุ่ม Import Theme"
+                )
+            end
+
+            task.wait(0.55)
+        end
+
+        if not HasZigzagWallpaper(root) then
+            local zigzagButton=
+                FindZigzagButton(root)
+
+            if zigzagButton then
+                PressButton(
+                    zigzagButton
+                )
+                task.wait(0.4)
+            end
+        end
+
+        if HasZigzagWallpaper(root) then
+            ZIGZAG_THEME_APPLIED=true
+
+            print(
+                "✅ ZIGZAG THEME APPLIED"
+            )
+
+            pcall(function()
+                StarterGui:SetCore(
+                    "SendNotification",
+                    {
+                        Title="💜 ZIGZAG Theme",
+                        Text="ใช้ธีม ZIGZAG อัตโนมัติแล้ว",
+                        Duration=4
+                    }
+                )
+            end)
+        else
+            print(
+                "ℹ️ ZIGZAG Theme waiting for BF Theme UI"
+            )
+        end
+
+        ZIGZAG_THEME_RUNNING=false
+    end)
+end
 
 --========================================================
--- TRANSLATE ONE LINE
+-- TRANSLATE ONE LINE: ORIGINAL V2.4 ENGINE PRESERVED
 --========================================================
 
 local function TranslateLine(line)
-
     if type(line)~="string" or line=="" then
         return line
     end
-
 
     local lead=line:match("^(%s*)") or ""
     local tail=line:match("(%s*)$") or ""
@@ -980,14 +1457,12 @@ local function TranslateLine(line)
         return line
     end
 
-
     -- EXACT
     local exact=LOWER[string.lower(c)]
 
     if exact then
         return lead..exact..tail
     end
-
 
     -- RICHTEXT
     local plain=
@@ -997,9 +1472,7 @@ local function TranslateLine(line)
         LOWER[string.lower(plain)]
 
     if exactPlain then
-
         if plain~=c then
-
             local replaced=
                 c:gsub(
                     EscapePattern(plain),
@@ -1013,7 +1486,6 @@ local function TranslateLine(line)
         return lead..exactPlain..tail
     end
 
-
     --====================================================
     -- DYNAMIC
     --====================================================
@@ -1025,14 +1497,12 @@ local function TranslateLine(line)
         return lead.."เลือกแล้ว "..n.." รายการ"..tail
     end
 
-
     local a,b=
         plain:match("^Players%s+(%d+)%/(%d+)$")
 
     if a then
         return lead.."ผู้เล่น "..a.."/"..b..tail
     end
-
 
     a,b=
         plain:match("^(%d+)%s*/%s*(%d+)%s+players$")
@@ -1041,14 +1511,12 @@ local function TranslateLine(line)
         return lead..a.."/"..b.." ผู้เล่น"..tail
     end
 
-
     local quick=
         plain:match("^Quick Bar%s*(%d+)$")
 
     if quick then
         return lead.."แถบด่วน "..quick..tail
     end
-
 
     local value=
         plain:match("^Last Steal:%s*(.+)$")
@@ -1057,14 +1525,12 @@ local function TranslateLine(line)
         return lead.."ขโมยล่าสุด: "..value..tail
     end
 
-
     value=
         plain:match("^Last Issue:%s*(.+)$")
 
     if value then
         return lead.."ปัญหาล่าสุด: "..value..tail
     end
-
 
     value=
         plain:match("^Last Sell:%s*(.+)$")
@@ -1073,14 +1539,12 @@ local function TranslateLine(line)
         return lead.."ขายล่าสุด: "..value..tail
     end
 
-
     value=
         plain:match("^Last Fuse:%s*(.+)$")
 
     if value then
         return lead.."ผสมล่าสุด: "..value..tail
     end
-
 
     value=
         plain:match("^Last claim:%s*(.+)$")
@@ -1089,7 +1553,6 @@ local function TranslateLine(line)
         return lead.."รับล่าสุด: "..value..tail
     end
 
-
     local matches=
         plain:match("^Matches:%s*(%d+)$")
 
@@ -1097,22 +1560,18 @@ local function TranslateLine(line)
         return lead.."ตรงเงื่อนไข: "..matches..tail
     end
 
-
     value=
         plain:match("^Carrying:%s*(.+)$")
 
     if value then
-
         if value:lower()=="yes" then
             value="ใช่"
-
         elseif value:lower()=="no" then
             value="ไม่"
         end
 
         return lead.."กำลังถือ: "..value..tail
     end
-
 
     value=
         plain:match("^Stolen this session:%s*(.+)$")
@@ -1121,14 +1580,12 @@ local function TranslateLine(line)
         return lead.."ขโมยได้ในเซสชันนี้: "..value..tail
     end
 
-
     value=
         plain:match("^([%d%.]+)%s+studs/s$")
 
     if value then
         return lead..value.." studs/วินาที"..tail
     end
-
 
     local expires=
         plain:match("^Expires:%s*(.+)$")
@@ -1137,14 +1594,12 @@ local function TranslateLine(line)
         return lead.."หมดอายุ: "..expires..tail
     end
 
-
     local features=
         plain:match("^(%d+)%s+features on$")
 
     if features then
         return lead..features.." ฟีเจอร์ที่เปิด"..tail
     end
-
 
     local fps=
         plain:match("^(%d+)%s+fps$")
@@ -1153,14 +1608,12 @@ local function TranslateLine(line)
         return lead..fps.." FPS"..tail
     end
 
-
     local ping=
         plain:match("^([%d%.]+)%s+ms%s+ping$")
 
     if ping then
         return lead..ping.." ms ปิง"..tail
     end
-
 
     local keytime=
         plain:match("^(.+)%s+key time$")
@@ -1169,7 +1622,6 @@ local function TranslateLine(line)
         return lead..keytime.." เวลาคีย์"..tail
     end
 
-
     local sessiontime=
         plain:match("^(.+)%s+session$")
 
@@ -1177,14 +1629,12 @@ local function TranslateLine(line)
         return lead..sessiontime.." เวลาใช้งาน"..tail
     end
 
-
     local eggcount,where=
         plain:match(
             "^Showing%s+(%d+)%s+egg%(s%):%s*(.+)$"
         )
 
     if eggcount then
-
         where=
             where:gsub(
                 "your plot",
@@ -1200,14 +1650,12 @@ local function TranslateLine(line)
             ..tail
     end
 
-
     local trios=
         plain:match(
             "^Ready to fuse:%s*(%d+)%s+trios$"
         )
 
     if trios then
-
         return
             lead
             .."พร้อมผสม: "
@@ -1216,14 +1664,12 @@ local function TranslateLine(line)
             ..tail
     end
 
-
     local scrambleTime=
         plain:match(
             "^Next Dr%. Scramble fight in%s+(.+)%s+%(estimated%)%.$"
         )
 
     if scrambleTime then
-
         return
             lead
             .."Dr. Scramble ครั้งถัดไปใน "
@@ -1232,14 +1678,12 @@ local function TranslateLine(line)
             ..tail
     end
 
-
     local income,count=
         plain:match(
             "^Equipped:%s*(.-)%s*%(%s*(%d+)%s+pets%s*%)$"
         )
 
     if income then
-
         return
             lead
             .."ที่สวมใส่: "
@@ -1250,14 +1694,12 @@ local function TranslateLine(line)
             ..tail
     end
 
-
     income,count=
         plain:match(
             "^Inventory total:%s*(.-)%s*%(%s*(%d+)%s+pets%s*%)$"
         )
 
     if income then
-
         return
             lead
             .."รวมในกระเป๋า: "
@@ -1268,14 +1710,12 @@ local function TranslateLine(line)
             ..tail
     end
 
-
     value=
         plain:match("^Pets:%s*(.+)$")
 
     if value then
         return lead.."สัตว์เลี้ยง: "..value..tail
     end
-
 
     value=
         plain:match("^Eggs:%s*(.+)$")
@@ -1284,14 +1724,12 @@ local function TranslateLine(line)
         return lead.."ไข่: "..value..tail
     end
 
-
     value=
         plain:match("^All:%s*(.+)$")
 
     if value then
         return lead.."รวมทั้งหมด: "..value..tail
     end
-
 
     -- CONFIG STATUS
     local loaded,autoload=
@@ -1300,7 +1738,6 @@ local function TranslateLine(line)
         )
 
     if loaded then
-
         if loaded=="none" then
             loaded="ไม่มี"
         end
@@ -1314,7 +1751,6 @@ local function TranslateLine(line)
             ..tail
     end
 
-
     --====================================================
     -- PARTIAL
     --====================================================
@@ -1322,7 +1758,6 @@ local function TranslateLine(line)
     local r=c
 
     local P={
-
         {"Capture Egg","จับไข่"},
         {"Safety","ความปลอดภัย"},
         {"Status","สถานะ"},
@@ -1339,6 +1774,7 @@ local function TranslateLine(line)
         {"Auto Upgrade Pen","ออโต้อัปเกรดคอก"},
         {"Auto Treadmill Training","ออโต้ฝึกลู่วิ่ง"},
         {"Auto Treadmill Upgrade","ออโต้อัปเกรดลู่วิ่ง"},
+        {"Auto Admin Treadmill","ออโต้ลู่วิ่งแอดมิน"},
 
         {"Auto Buy Selected Trails","ออโต้ซื้อ Trail ที่เลือก"},
         {"Auto Buy All Cash Trails","ออโต้ซื้อ Trail ที่ใช้เงินสดทั้งหมด"},
@@ -1465,59 +1901,47 @@ local function TranslateLine(line)
         {"Snow","หิมะ"},
     }
 
-
     for _,pair in ipairs(P) do
         r=r:gsub(pair[1],pair[2])
     end
-
 
     if r~=c then
         return lead..r..tail
     end
 
-
     return line
 end
-
 
 --========================================================
 -- MULTI LINE
 --========================================================
 
 local function Translate(text)
-
     if type(text)~="string" or text=="" then
         return text
     end
-
 
     if not text:find("\n",1,true) then
         return TranslateLine(text)
     end
 
-
     local output={}
 
-
     for line in (text.."\n"):gmatch("(.-)\n") do
-
         table.insert(
             output,
             TranslateLine(line)
         )
     end
 
-
     return table.concat(output,"\n")
 end
-
 
 --========================================================
 -- BF SIGNATURES
 --========================================================
 
 local SIGNATURES={
-
 "auto steal eggs",
 "auto capture egg",
 "contest flee range",
@@ -1534,39 +1958,30 @@ local SIGNATURES={
 "auto load selected",
 "dr. scramble",
 "big egg filter",
-
 }
 
-
 local function IsBFSignature(text)
-
     if type(text)~="string" then
         return false
     end
-
 
     local lower=
         string.lower(
             Clean(text)
         )
 
-
     for _,signature in ipairs(SIGNATURES) do
-
         if lower:find(
             signature,
             1,
             true
         ) then
-
             return true
         end
     end
 
-
     return false
 end
-
 
 --========================================================
 -- ROOTS
@@ -1574,83 +1989,62 @@ end
 
 local ROOTS={}
 
-
 local function AddRoot(root)
-
     if not root then
         return false
     end
 
-
     for _,r in ipairs(ROOTS) do
-
         if r==root then
             return false
         end
     end
 
-
     table.insert(ROOTS,root)
-
     return true
 end
-
 
 AddRoot(PG)
 AddRoot(CoreGui)
 
-
 if type(gethui)=="function" then
-
     local ok,hui=pcall(gethui)
-
     if ok and hui then
         AddRoot(hui)
     end
 end
-
 
 --========================================================
 -- FIND TOP UI ROOT
 --========================================================
 
 local function FindTopUIRoot(object)
-
     if not object then
         return nil
     end
 
-
     local current=object
     local last=object
 
-
     while current.Parent do
-
         local parent=current.Parent
 
-
         for _,root in ipairs(ROOTS) do
-
             if parent==root then
                 return current
             end
         end
 
-
         if current:IsA("ScreenGui") then
             return current
         end
-
 
         last=current
         current=parent
     end
 
-
     return last
 end
-
 
 --========================================================
 -- STATE
@@ -1662,13 +2056,11 @@ local ClaimedRoots=
         {__mode="k"}
     )
 
-
 local WatchedTexts=
     setmetatable(
         {},
         {__mode="k"}
     )
-
 
 local Busy=
     setmetatable(
@@ -1676,27 +2068,22 @@ local Busy=
         {__mode="k"}
     )
 
-
 local RootConnections=
     setmetatable(
         {},
         {__mode="k"}
     )
 
-
 --========================================================
 -- CREDIT
 --========================================================
 
 local function AddCredit(root)
-
     if not root or not root.Parent then
         return
     end
 
-
     local parent=root
-
 
     if not parent:IsA("GuiObject")
         and not parent:IsA("LayerCollector")
@@ -1704,17 +2091,14 @@ local function AddCredit(root)
         return
     end
 
-
     if parent:FindFirstChild(
         "ZIGZAG_BF_TRANSLATION_CREDIT"
     ) then
         return
     end
 
-
     local label=
         Instance.new("TextLabel")
-
 
     label.Name=
         "ZIGZAG_BF_TRANSLATION_CREDIT"
@@ -1748,7 +2132,6 @@ local function AddCredit(root)
     label.ZIndex=999999
     label.Active=false
 
-
     local stroke=
         Instance.new("UIStroke")
 
@@ -1762,7 +2145,6 @@ local function AddCredit(root)
     stroke.Transparency=0.12
     stroke.Parent=label
 
-
     local gradient=
         Instance.new("UIGradient")
 
@@ -1771,64 +2153,50 @@ local function AddCredit(root)
 
     gradient.Color=
         ColorSequence.new({
-
             ColorSequenceKeypoint.new(
                 0,
                 Color3.fromRGB(255,235,250)
             ),
-
             ColorSequenceKeypoint.new(
                 0.5,
                 Color3.fromRGB(255,90,210)
             ),
-
             ColorSequenceKeypoint.new(
                 1,
                 Color3.fromRGB(255,220,248)
             )
-
         })
 
     gradient.Parent=label
     label.Parent=parent
 end
 
-
 --========================================================
 -- APPLY TEXT
 --========================================================
 
 local function ApplyText(object)
-
     if not IsText(object)
         or Busy[object]
     then
         return false
     end
 
-
     Busy[object]=true
-
     local changed=false
 
-
     pcall(function()
-
         local old=object.Text
         local new=Translate(old)
 
         if old~=new then
-
             object.Text=new
             changed=true
         end
     end)
 
-
     if object:IsA("TextBox") then
-
         pcall(function()
-
             local old=
                 object.PlaceholderText
 
@@ -1836,47 +2204,37 @@ local function ApplyText(object)
                 Translate(old)
 
             if old~=new then
-
                 object.PlaceholderText=new
                 changed=true
             end
         end)
     end
 
-
     Busy[object]=nil
-
     return changed
 end
-
 
 --========================================================
 -- WATCH DYNAMIC TEXT
 --========================================================
 
 local function WatchText(object)
-
     if not IsText(object)
         or WatchedTexts[object]
     then
         return
     end
 
-
     WatchedTexts[object]=true
-
 
     object:GetPropertyChangedSignal(
         "Text"
     ):Connect(function()
-
         if Busy[object] then
             return
         end
 
-
         task.defer(function()
-
             if object
                 and object.Parent
             then
@@ -1885,20 +2243,15 @@ local function WatchText(object)
         end)
     end)
 
-
     if object:IsA("TextBox") then
-
         object:GetPropertyChangedSignal(
             "PlaceholderText"
         ):Connect(function()
-
             if Busy[object] then
                 return
             end
 
-
             task.defer(function()
-
                 if object
                     and object.Parent
                 then
@@ -1908,178 +2261,170 @@ local function WatchText(object)
         end)
     end
 end
-
 
 --========================================================
 -- APPLY BF ROOT
 --========================================================
 
 local function ApplyBFRoot(root)
-
     if not root
         or not root.Parent
     then
         return
     end
 
-
     if ClaimedRoots[root] then
         return
     end
 
-
     ClaimedRoots[root]=true
 
-
     if IsText(root) then
-
         ApplyText(root)
         WatchText(root)
     end
 
-
     for _,object in ipairs(
         root:GetDescendants()
     ) do
-
         if IsText(object) then
-
             ApplyText(object)
             WatchText(object)
         end
     end
 
-
     AddCredit(root)
 
+    --====================================================
+    -- ZIGZAG AUTO THEME
+    --====================================================
+
+    task.delay(
+        0.35,
+        function()
+            if root
+                and root.Parent
+            then
+                TryApplyZigzagTheme(
+                    root
+                )
+            end
+        end
+    )
 
     local descendantConnection=
         root.DescendantAdded
         :Connect(function(object)
+            if IsThemeImportBox(object) then
+                task.delay(
+                    0.15,
+                    function()
+                        if root
+                            and root.Parent
+                        then
+                            TryApplyZigzagTheme(
+                                root
+                            )
+                        end
+                    end
+                )
+            end
 
             if not IsText(object) then
                 return
             end
 
-
             task.defer(function()
-
                 if object
                     and object.Parent
                 then
-
                     ApplyText(object)
                     WatchText(object)
                 end
             end)
         end)
 
-
     local ancestryConnection
-
 
     ancestryConnection=
         root.AncestryChanged
         :Connect(function()
-
             if not root.Parent then
-
                 pcall(function()
                     descendantConnection:Disconnect()
                 end)
 
-
                 pcall(function()
                     ancestryConnection:Disconnect()
                 end)
-
 
                 ClaimedRoots[root]=nil
                 RootConnections[root]=nil
             end
         end)
 
-
     RootConnections[root]={
         descendantConnection,
         ancestryConnection
     }
-
 
     print(
         "✅ BF UI detected | Thai translation active"
     )
 end
 
-
 --========================================================
 -- SCORE ROOT
 --========================================================
 
 local function ScoreRoot(root)
-
     if not root
         or not root.Parent
     then
         return 0
     end
 
-
     local score=0
     local checked=0
 
-
     local function CheckObject(o)
-
         if checked>=150 then
             return
         end
-
 
         if not IsText(o) then
             return
         end
 
-
         checked+=1
-
 
         local text=
             Clean(
                 GetRawText(o)
             )
 
-
         if text=="" then
             return
         end
 
-
         if IsBFSignature(text) then
-
             score+=5
             return
         end
 
-
         if LOWER[
             string.lower(text)
         ] then
-
             score+=1
         end
     end
 
-
     CheckObject(root)
-
 
     for _,o in ipairs(
         root:GetDescendants()
     ) do
-
         CheckObject(o)
-
 
         if checked>=150
             or score>=5
@@ -2088,57 +2433,44 @@ local function ScoreRoot(root)
         end
     end
 
-
     return score
 end
-
 
 --========================================================
 -- NEW OBJECT HANDLER
 --========================================================
 
 local function CheckNewText(object)
-
     if not IsText(object) then
         return
     end
 
-
     local text=
         GetRawText(object)
 
-
     if IsBFSignature(text) then
-
         local root=
             FindTopUIRoot(object)
-
 
         if root then
             ApplyBFRoot(root)
         end
 
-
         return
     end
-
 
     for root,_ in pairs(
         ClaimedRoots
     ) do
-
         if object==root
             or object:IsDescendantOf(root)
         then
-
             ApplyText(object)
             WatchText(object)
-
             return
         end
     end
 end
-
 
 --========================================================
 -- WATCH ROOTS
@@ -2150,44 +2482,33 @@ local WatchedRoots=
         {__mode="k"}
     )
 
-
 local NewCandidates=
     setmetatable(
         {},
         {__mode="k"}
     )
 
-
 local function WatchRoot(root)
-
     if not root
         or WatchedRoots[root]
     then
         return
     end
 
-
     WatchedRoots[root]=true
-
 
     root.ChildAdded
     :Connect(function(child)
-
         NewCandidates[child]=true
     end)
 
-
     root.DescendantAdded
     :Connect(function(object)
-
         if IsText(object) then
-
             task.defer(function()
-
                 if object
                     and object.Parent
                 then
-
                     CheckNewText(object)
                 end
             end)
@@ -2195,30 +2516,24 @@ local function WatchRoot(root)
     end)
 end
 
-
 for _,root in ipairs(ROOTS) do
     WatchRoot(root)
 end
-
 
 --========================================================
 -- FALLBACK
 --========================================================
 
 local function CheckCandidates()
-
     for root,_ in pairs(
         NewCandidates
     ) do
-
         if root
             and root.Parent
             and not ClaimedRoots[root]
         then
-
             local score=
                 ScoreRoot(root)
-
 
             if score>=3 then
                 ApplyBFRoot(root)
@@ -2227,87 +2542,91 @@ local function CheckCandidates()
     end
 end
 
+--========================================================
+-- TRY THEME ON CLAIMED BF ROOT
+--========================================================
+
+local function TryThemeOnBF()
+    if ZIGZAG_THEME_APPLIED then
+        return
+    end
+
+    for root,_ in pairs(
+        ClaimedRoots
+    ) do
+        if root
+            and root.Parent
+        then
+            TryApplyZigzagTheme(
+                root
+            )
+            return
+        end
+    end
+end
 
 --========================================================
 -- REFRESH GETHUI
 --========================================================
 
 local function RefreshHUI()
-
     if type(gethui)~="function" then
         return
     end
 
-
     local ok,hui=
         pcall(gethui)
 
-
     if ok and hui then
-
         if AddRoot(hui) then
             WatchRoot(hui)
         end
     end
 end
 
-
 --========================================================
 -- TRANSLATOR STARTS FIRST
 --========================================================
 
 print(
-    "✅ ZIGZAG BF Translator V2.4 armed"
+    "✅ ZIGZAG BF Translator V2.5.3 RACE UPDATE armed"
 )
-
 
 --========================================================
 -- LOAD BF
 --========================================================
 
 task.spawn(function()
-
     local ok,source=
         pcall(function()
-
             return game:HttpGet(
                 BF_URL
             )
         end)
 
-
     if not ok then
-
         warn(
             "[BF ZIGZAG] โหลด BFLoader ไม่สำเร็จ:",
             source
         )
-
         return
     end
-
 
     local func,err=
         loadstring(source)
 
-
     if not func then
-
         warn(
             "[BF ZIGZAG] Load Error:",
             err
         )
-
         return
     end
-
 
     local success,runError=
         pcall(func)
 
-
     if not success then
-
         warn(
             "[BF ZIGZAG] Runtime Error:",
             runError
@@ -2315,34 +2634,36 @@ task.spawn(function()
     end
 end)
 
-
 --========================================================
 -- STARTUP FALLBACK
+-- ตรวจเฉพาะช่วงเริ่ม ไม่มี Loop สแกนถาวร
 --========================================================
 
 task.spawn(function()
-
     task.wait(0.5)
     RefreshHUI()
     CheckCandidates()
+    TryThemeOnBF()
 
     task.wait(1)
     RefreshHUI()
     CheckCandidates()
+    TryThemeOnBF()
 
     task.wait(2)
     RefreshHUI()
     CheckCandidates()
+    TryThemeOnBF()
 
     task.wait(3)
     RefreshHUI()
     CheckCandidates()
+    TryThemeOnBF()
 
     task.wait(4)
     CheckCandidates()
-
+    TryThemeOnBF()
 end)
-
 
 --========================================================
 -- NOTIFICATION
@@ -2351,14 +2672,12 @@ end)
 task.delay(
     2,
     function()
-
         pcall(function()
-
             StarterGui:SetCore(
                 "SendNotification",
                 {
                     Title="🥭 BigFroot ภาษาไทย",
-                    Text="แปลไทยโดย ZIGZAG | V2.4",
+                    Text="ZIGZAG V2.5.3 | Race + Shooting Stars",
                     Duration=5
                 }
             )
@@ -2366,13 +2685,18 @@ task.delay(
     end
 )
 
+--========================================================
+-- CONSOLE
+--========================================================
 
 print("========================================")
-print("✅ BIGFROOT THAI - ZIGZAG V2.4 MERGED")
-print("✅ WORKING V2 ENGINE")
+print("✅ BIGFROOT THAI - ZIGZAG V2.5.3 FULL MERGED")
+print("✅ WORKING V2.5.2 BASE PRESERVED")
+print("✅ V2.4 TRANSLATOR ENGINE PRESERVED")
 print("✅ BFLoader INCLUDED")
-print("✅ V2.3 BASE PRESERVED")
 print("✅ BF V1.7.9 ENCHANTED UPDATE")
+print("✅ BF V1.8.2 RACE TRANSLATIONS")
+print("✅ RACE RALLY / RACE REWARDS / SHOOTING STARS")
 print("✅ WISP / BUTTERFLIES / ESSENCE")
 print("✅ TRADE UP / BANJO CRICKET")
 print("✅ AREA / DROPDOWN")
@@ -2384,4 +2708,15 @@ print("✅ DR SCRAMBLE")
 print("✅ MULTI-LINE + RICHTEXT")
 print("✅ DYNAMIC TEXT")
 print("✅ ZIGZAG CREDIT")
+print("✅ ZIGZAG THEME EMBEDDED")
+print("✅ ICON: 104570286698558")
+print("✅ WALLPAPER: 104570286698558")
+print("✅ AUTO THEME IMPORT / APPLY")
+print("✅ AUTO ADMIN TREADMILL TRANSLATED")
+print("✅ PLOT CENTER = กลางฐาน")
+print("✅ PEN AREA = พื้นที่คอก")
+print("✅ START AREA = พื้นที่เริ่มต้น")
+print("✅ 1ST AREA = พื้นที่แรก (ไม่ต้องเคลม)")
+print("✅ NO RENDERSTEPPED TRANSLATION")
+print("✅ NO PERMANENT FULL SCAN")
 print("========================================")
