@@ -1,802 +1,2387 @@
---[[
-    ZIGZAG HUB • MANGA EYE V4 • EGG COMMAND CENTER
-    Standalone original UI. Read-only egg discovery, filters, local markers, and feature configurations.
-    No external script loaders, HTTP, teleport hooks, remote calls, anti-idle, or character edits.
-    Image by the user: rbxassetid://85580956675001
-    IMPORTANT: This script is not a bypass for Roblox/game anti-cheat.
-]]
+--========================================================
+-- BIGFROOT THAI - ZIGZAG V2.4 MERGED
+-- Working V2 Engine + V2.3 + Enchanted Update
+-- BF v1.7.9
+--========================================================
 
-local Players = game:GetService("Players")
-local UIS = game:GetService("UserInputService")
-local player = Players.LocalPlayer
-if not player then return end
-local playerGui = player:WaitForChild("PlayerGui")
-local GUI_NAME = "ZIGZAG_HUB_MANGA_EYE_STANDALONE_V2"
-local previous = playerGui:FindFirstChild(GUI_NAME)
-if previous then previous:Destroy() end
+local Players=game:GetService("Players")
+local CoreGui=game:GetService("CoreGui")
+local StarterGui=game:GetService("StarterGui")
 
-local COLORS = {
-    background = Color3.fromRGB(12, 10, 20),
-    panel = Color3.fromRGB(21, 17, 35),
-    surface = Color3.fromRGB(35, 27, 54),
-    hover = Color3.fromRGB(48, 36, 74),
-    purple = Color3.fromRGB(170, 111, 254),
-    purpleLight = Color3.fromRGB(219, 186, 255),
-    outline = Color3.fromRGB(99, 73, 150),
-    white = Color3.fromRGB(249, 247, 255),
-    muted = Color3.fromRGB(173, 161, 199),
-    mint = Color3.fromRGB(132, 239, 196),
-    yellow = Color3.fromRGB(255, 210, 120),
+local LP=Players.LocalPlayer
+local PG=LP:WaitForChild("PlayerGui")
+
+local BF_URL=
+"https://raw.githubusercontent.com/hanniii1/Loader/refs/heads/main/BFLoader.lua"
+
+local CREDIT_TEXT="✦ แปลไทยโดย ZIGZAG"
+local CREDIT_COLOR=Color3.fromRGB(255,105,220)
+local CREDIT_STROKE=Color3.fromRGB(255,220,248)
+
+
+--========================================================
+-- TRANSLATIONS
+--========================================================
+
+local T={
+
+-- MAIN
+["Main"]="หลัก",
+["Home"]="หน้าหลัก",
+["Eggs"]="ไข่",
+["Progression"]="ความคืบหน้า",
+["Pets"]="สัตว์เลี้ยง",
+["Events"]="กิจกรรม",
+["Contest"]="ต่อสู้แย่งชิง",
+["Fuse"]="ผสม",
+["Visual"]="การแสดงผล",
+["Visuals"]="การแสดงผล",
+["Dashboard"]="แดชบอร์ด",
+["Webhook"]="เว็บฮุก",
+["Settings"]="การตั้งค่า",
+["Other"]="อื่นๆ",
+
+["General"]="ทั่วไป",
+["Farm"]="ฟาร์ม",
+["Automation"]="ระบบอัตโนมัติ",
+["Misc"]="อื่นๆ",
+["Prediction"]="การคาดการณ์",
+["Schedule"]="ตารางเวลา",
+["Community"]="ชุมชน",
+["Discord"]="ดิสคอร์ด",
+
+["Config"]="คอนฟิก",
+["Configs"]="คอนฟิก",
+["Theming"]="ธีม",
+["Theme"]="ธีม",
+
+["Steal an Egg"]="ขโมยไข่",
+
+["Refresh"]="รีเฟรช",
+["Refresh Lists"]="รีเฟรชรายการ",
+["Refresh list"]="รีเฟรชรายการ",
+
+["Search"]="ค้นหา",
+["Search..."]="ค้นหา...",
+
+["None"]="ไม่มี",
+["All"]="ทั้งหมด",
+["Any"]="ทั้งหมด",
+
+["Enabled"]="เปิดใช้งาน",
+["Disabled"]="ปิดใช้งาน",
+
+["On"]="เปิด",
+["Off"]="ปิด",
+["Off."]="ปิด",
+
+["Save"]="บันทึก",
+["Load"]="โหลด",
+["Delete"]="ลบ",
+["Create"]="สร้าง",
+["Import"]="นำเข้า",
+["Export"]="ส่งออก",
+["Copy"]="คัดลอก",
+["Reset"]="รีเซ็ต",
+["Clear"]="ล้าง",
+
+
+-- HOME
+["Announcements"]="ประกาศ",
+["Quick actions"]="คำสั่งด่วน",
+["Quick Actions"]="คำสั่งด่วน",
+["Copy Discord"]="คัดลอก Discord",
+["Load last config"]="โหลดคอนฟิกล่าสุด",
+["Rejoin"]="เข้าเซิร์ฟเวอร์ใหม่",
+["Server hop"]="ย้ายเซิร์ฟเวอร์",
+["Server Hop"]="ย้ายเซิร์ฟเวอร์",
+["Toggle watermark"]="เปิด/ปิดลายน้ำ",
+
+["Status"]="สถานะ",
+["Stats"]="สถิติ",
+["Account"]="บัญชี",
+
+["Key status"]="สถานะคีย์",
+["Free"]="ฟรี",
+["Replace key"]="เปลี่ยนคีย์",
+
+["session"]="เวลาใช้งาน",
+["features on"]="ฟีเจอร์ที่เปิด",
+["fps"]="FPS",
+["ping"]="ปิง",
+["players"]="ผู้เล่น",
+["key time"]="เวลาคีย์",
+["Expires"]="หมดอายุ",
+
+
+-- AUTO STEAL
+["Auto Steal"]="ออโต้ขโมย",
+["Auto Steal Egg"]="ออโต้ขโมยไข่",
+["Auto Steal Eggs"]="ออโต้ขโมยไข่",
+
+["Auto Capture Egg"]="ออโต้จับไข่",
+["Capture Egg"]="จับไข่",
+
+["Contest Flee Range (studs)"]=
+"ระยะหนีจากผู้เล่นที่แย่งไข่ (studs)",
+
+["Avoid Traps"]="หลบกับดัก",
+
+["Target Priority"]="ลำดับความสำคัญเป้าหมาย",
+["Priority"]="ลำดับความสำคัญ",
+
+["Rarity"]="ความหายาก",
+["Value"]="มูลค่า",
+
+["Size"]="ขนาด",
+["Closest"]="ใกล้ที่สุด",
+["Farthest"]="ไกลที่สุด",
+["Random"]="สุ่ม",
+
+["Return To Plot"]="กลับฐาน",
+["Return to Plot"]="กลับฐาน",
+
+["Return To"]="กลับไปยัง",
+["Plot Spawn"]="จุดเกิดในฐาน",
+
+["Return To Last Position"]="กลับตำแหน่งล่าสุด",
+["Return to Last Position"]="กลับตำแหน่งล่าสุด",
+
+["Anti AFK"]="กัน AFK",
+["Anti-AFK"]="กัน AFK",
+
+["Auto Execute"]="เปิดสคริปต์อัตโนมัติ",
+["Auto Reconnect"]="เชื่อมต่อใหม่อัตโนมัติ",
+
+["Safety"]="ความปลอดภัย",
+["Nothing flagged."]="ไม่พบปัญหา",
+
+["Session"]="เซสชัน",
+
+["No egg matches the current filters."]=
+"ไม่มีไข่ที่ตรงกับตัวกรองปัจจุบัน",
+
+["Reset Session Counter"]="รีเซ็ตตัวนับเซสชัน",
+
+["Drop Carried Egg"]="ปล่อยไข่ที่กำลังถือ",
+["Drop Held Egg"]="ปล่อยไข่ที่กำลังถือ",
+
+
+-- OP STUFF
+["OP Stuffs"]="ฟังก์ชันพิเศษ",
+
+["God Mode"]="โหมดป้องกัน",
+["GodMode"]="โหมดป้องกัน",
+
+["Instant Steal"]="ขโมยทันที",
+
+["Glide"]="ร่อน",
+["Glide Method"]="วิธีร่อน",
+["Glide Speed"]="ความเร็วร่อน",
+
+["Anti Treadmill"]="กันลู่วิ่ง",
+
+["Anti Hit"]="กันโจมตี",
+["Anti Guard"]="ป้องกันยาม",
+
+["Anti Knockback"]="กันกระเด็น",
+["Anti Knock Back"]="กันกระเด็น",
+
+["Anti Ragdoll"]="กันล้ม",
+
+["Walk Speed"]="ความเร็วเดิน",
+["Fly Speed"]="ความเร็วบิน",
+["Carry Speed"]="ความเร็วขณะถือไข่",
+
+
+-- FILTERS
+["Auto Steal Filter"]="ตัวกรองออโต้ขโมย",
+["Filter"]="ตัวกรอง",
+["Filters"]="ตัวกรอง",
+
+["Egg Name"]="ชื่อไข่",
+["Egg Names"]="ชื่อไข่",
+
+["Filter By Egg Name"]="กรองตามชื่อไข่",
+["Filter by Egg Name"]="กรองตามชื่อไข่",
+
+["Area"]="พื้นที่",
+["Areas"]="พื้นที่",
+["Select Area"]="เลือกพื้นที่",
+
+["Category"]="หมวดหมู่",
+["Categories"]="หมวดหมู่",
+
+["Rarity"]="ความหายาก",
+["Rarities"]="ระดับความหายาก",
+
+["Filter By Rarity"]="กรองตามความหายาก",
+["Filter by Rarity"]="กรองตามความหายาก",
+
+["Mutation"]="การกลายพันธุ์",
+["Mutations"]="การกลายพันธุ์",
+
+["Match ALL Selected Mutations"]=
+"ต้องตรงกับการกลายพันธุ์ที่เลือกทั้งหมด",
+
+["Match All Selected Mutations"]=
+"ต้องตรงกับการกลายพันธุ์ที่เลือกทั้งหมด",
+
+["Only Mutated Eggs"]="เฉพาะไข่ที่กลายพันธุ์",
+
+["Min $/s (0 = any)"]=
+"รายได้ขั้นต่ำ $/วิ (0 = ไม่จำกัด)",
+
+["Min KG (0 = any)"]=
+"น้ำหนักขั้นต่ำ KG (0 = ไม่จำกัด)",
+
+["Big Egg KG (0 = off)"]=
+"น้ำหนักไข่ใหญ่ KG (0 = ปิด)",
+
+["Big Egg Filter"]="ตัวกรองไข่ใหญ่",
+
+["Always Steal Dragon Eggs"]=
+"ขโมยไข่มังกรเสมอ",
+
+["Skip Contested Eggs"]=
+"ข้ามไข่ที่มีผู้เล่นอื่นกำลังแย่ง",
+
+["Matches"]="รายการที่ตรงเงื่อนไข",
+["Best Matches"]="เป้าหมายที่ตรงที่สุด",
+
+["No egg on the map matches the current filters."]=
+"ไม่มีไข่บนแผนที่ที่ตรงกับตัวกรองปัจจุบัน",
+
+
+-- AREA
+["Abyss Ocean"]="มหาสมุทรอเวจี",
+["Cherry Blossom"]="ซากุระ",
+["Cosmic"]="คอสมิก",
+["Desert"]="ทะเลทราย",
+["Forest"]="ป่า",
+["Jungle"]="ป่าดิบ",
+["Lake"]="ทะเลสาบ",
+["Light Dark"]="ไลท์ดาร์ก",
+["LIGHT DARK"]="ไลท์ดาร์ก",
+["Prehistoric"]="ยุคดึกดำบรรพ์",
+["Snow"]="หิมะ",
+["Titan Temple"]="วิหารไททัน",
+["Volcano"]="ภูเขาไฟ",
+
+
+-- EGGS
+["Egg Automation"]="ระบบอัตโนมัติสำหรับไข่",
+
+["Auto Place"]="ออโต้วาง",
+["Auto Place Egg"]="ออโต้วางไข่",
+["Auto Place Eggs"]="ออโต้วางไข่",
+
+["Auto Place Selected"]="ออโต้วางไข่ที่เลือก",
+["Auto Place All"]="ออโต้วางไข่ทั้งหมด",
+
+["Auto Hatch"]="ออโต้ฟักไข่",
+["Auto Hatch Egg"]="ออโต้ฟักไข่",
+["Auto Hatch Eggs"]="ออโต้ฟักไข่",
+["Auto Hatch Ready"]="ออโต้ฟักไข่ที่พร้อม",
+
+["Use Filter for Auto Hatch Ready"]=
+"ใช้ตัวกรองกับออโต้ฟักไข่ที่พร้อม",
+
+["Hatch"]="ฟักไข่",
+
+["Place Only Above KG"]=
+"วางเฉพาะไข่ที่หนักกว่า KG ที่กำหนด",
+
+["Place Only Above $/s"]=
+"วางเฉพาะไข่ที่รายได้สูงกว่า $/วิ",
+
+["Place Only Below KG"]=
+"วางเฉพาะไข่ที่เบากว่า KG ที่กำหนด",
+
+["Place Only Below $/s"]=
+"วางเฉพาะไข่ที่รายได้ต่ำกว่า $/วิ",
+
+["Place Thresholds"]="เงื่อนไขการวางไข่",
+
+["Auto Rift eggs ignore these."]=
+"ไข่ Rift อัตโนมัติจะไม่ใช้เงื่อนไขเหล่านี้",
+
+["Auto Place Status"]="สถานะออโต้วางไข่",
+
+["Auto Sell Egg"]="ออโต้ขายไข่",
+["Auto Sell Eggs"]="ออโต้ขายไข่",
+
+["Sell Eggs Below KG (put so it will work)"]=
+"ขายไข่ที่ต่ำกว่า KG ที่กำหนด (ใส่ค่าเพื่อให้ทำงาน)",
+
+["Sell Eggs Below $/s (0 = off)"]=
+"ขายไข่ที่รายได้ต่ำกว่า $/วิ (0 = ปิด)",
+
+["Egg Sell Status"]="สถานะการขายไข่",
+["Turn Auto Sell Eggs on."]="เปิดออโต้ขายไข่เพื่อเริ่มทำงาน",
+
+
+-- PROGRESSION
+["Upgrades"]="อัปเกรด",
+
+["Pen"]="คอก",
+["Auto Upgrade Pen"]="ออโต้อัปเกรดคอก",
+
+["Treadmill"]="ลู่วิ่ง",
+["Auto Treadmill"]="ออโต้ลู่วิ่ง",
+
+["Auto Treadmill Training"]="ออโต้ฝึกลู่วิ่ง",
+["Auto Treadmill Upgrade"]="ออโต้อัปเกรดลู่วิ่ง",
+
+["Trails"]="Trail",
+["Trails To Buy"]="Trail ที่ต้องการซื้อ",
+
+["Auto Buy Selected Trails"]="ออโต้ซื้อ Trail ที่เลือก",
+
+["Auto Buy All Cash Trails"]=
+"ออโต้ซื้อ Trail ที่ใช้เงินสดทั้งหมด",
+
+["Auto Equip Best Trail"]="ออโต้ใส่ Trail ที่ดีที่สุด",
+
+["Gear & Rewards"]="อุปกรณ์และรางวัล",
+
+["Auto Equip Best Gear"]="ออโต้ใส่อุปกรณ์ที่ดีที่สุด",
+
+["Auto Claim Index Rewards"]="ออโต้รับรางวัล Index",
+
+["Auto Claim Group Reward"]="ออโต้รับรางวัลกลุ่ม",
+
+
+-- VISUAL
+["Performance"]="ประสิทธิภาพ",
+
+["Ultra FPS Boost"]="เพิ่ม FPS สูงสุด",
+["FPS Boost"]="เพิ่ม FPS",
+
+["Delete Pets (FPS BOOST)"]="ซ่อนสัตว์เลี้ยง (เพิ่ม FPS)",
+
+["Inventory Value"]="มูลค่าของในกระเป๋า",
+
+["Inventory Value ESP"]="ESP มูลค่าของในกระเป๋า",
+
+["Egg ESP"]="ESP ไข่",
+
+["Max Distance (studs)"]="ระยะสูงสุด (studs)",
+
+["Show Everyone (wild + all plots)"]=
+"แสดงทั้งหมด (ไข่ป่า + ทุกฐาน)",
+
+["Egg ESP Filter"]="ตัวกรอง ESP ไข่",
+
+["Only Mutated"]="เฉพาะที่กลายพันธุ์",
+["Min KG"]="KG ขั้นต่ำ",
+
+
+-- FUSE
+["Auto Fuse Selected"]="ออโต้ผสมตัวที่เลือก",
+
+["Auto Fuse All Eligible"]=
+"ออโต้ผสมทุกตัวที่เข้าเงื่อนไข",
+
+["Only Fuse Pets Below $/s (0 = no limit)"]=
+"ผสมเฉพาะสัตว์ที่รายได้ต่ำกว่า $/วิ (0 = ไม่จำกัด)",
+
+["Fuse Predictor"]="คาดการณ์ผลการผสม",
+
+["Odds"]="โอกาส",
+["Nothing in the machine."]="ไม่มีอะไรอยู่ในเครื่อง",
+
+["Shrine Fusion"]="การผสมที่แท่น Shrine",
+
+["Two players, one per pad"]="ใช้ผู้เล่น 2 คน คนละแท่น",
+
+["My Pad"]="แท่นของฉัน",
+
+["Pet To Hold"]="สัตว์เลี้ยงที่ต้องถือ",
+
+["Auto Shrine Fusion"]="ออโต้ผสม Shrine",
+
+["Shrine"]="Shrine",
+
+["Divine: ArchAngel + World Burner = Aetheron. Eternal: Pegasus + Skeleton Horse = Equinox. Both players get the egg. Once per account per tier."]=
+"Divine: ArchAngel + World Burner = Aetheron | Eternal: Pegasus + Skeleton Horse = Equinox | ผู้เล่นทั้งสองคนจะได้รับไข่ ทำได้ 1 ครั้งต่อบัญชีในแต่ละระดับ",
+
+["Light pad: ArchAngel or Pegasus. Dark pad: World Burner or Skeleton Horse."]=
+"แท่น Light: ArchAngel หรือ Pegasus | แท่น Dark: World Burner หรือ Skeleton Horse",
+
+["ArchAngel"]="อาร์คแองเจิล (ArchAngel)",
+["Pegasus"]="เพกาซัส (Pegasus)",
+["Skeleton Horse"]="ม้าโครงกระดูก (Skeleton Horse)",
+["World Burner"]="เวิลด์เบิร์นเนอร์ (World Burner)",
+
+
+-- CONTEST
+["Contest Players"]="แย่งไข่จากผู้เล่น",
+
+["Contest Players (BETA)"]="แย่งไข่จากผู้เล่น (BETA)",
+
+["Bat Aura"]="ออร่าตีด้วยไม้",
+
+["Auto Equip Best Bat"]="ออโต้ใส่ไม้ตีที่ดีที่สุด",
+
+["Forward Offset (studs)"]="ระยะด้านหน้า (studs)",
+
+["Give Up After (seconds)"]="ยกเลิกหลังจาก (วินาที)",
+
+
+-- DR SCRAMBLE
+["Dr. Scramble"]="Dr. Scramble",
+["Dr Scramble"]="Dr. Scramble",
+
+["Auto Collect"]="ออโต้เก็บ",
+
+["Rarest Drones First"]="เก็บโดรนที่หายากที่สุดก่อน",
+
+["Auto Quest"]="ออโต้ทำเควสต์",
+
+["Scramble: waiting for the outbreak."]=
+"Scramble: กำลังรอ Outbreak",
+
+["Dr. Scramble Boss"]="บอส Dr. Scramble",
+
+["Auto Fight Boss"]="ออโต้ตีบอส",
+
+["Auto Claim Mastery"]="ออโต้รับ Mastery",
+
+["Scramble Shop"]="ร้าน Scramble",
+
+["Auto Buy"]="ออโต้ซื้อ",
+["Buy"]="ซื้อ",
+
+["Scrambled Mutation"]="การกลายพันธุ์ Scrambled",
+
+["2x Cash Booster"]="บูสต์เงิน 2x",
+["1.25x Speed"]="ความเร็ว 1.25x",
+["2x Treadmill Booster"]="บูสต์ลู่วิ่ง 2x",
+
+["Dr. Scramble Lab"]="แล็บ Dr. Scramble",
+
+["Auto Trade-In"]="ออโต้แลก",
+["Auto Trade In"]="ออโต้แลก",
+
+["Banners (empty = any)"]="Banner (ว่าง = ทั้งหมด)",
+["Banner (empty = any)"]="Banner (ว่าง = ทั้งหมด)",
+
+["Biohazard Pets"]="สัตว์เลี้ยง Biohazard",
+
+["Experimental Pets"]="สัตว์เลี้ยงทดลอง",
+
+["Unstable DNA"]="DNA ไม่เสถียร (Unstable DNA)",
+
+["Auto Steal Recipe Eggs"]="ออโต้ขโมยไข่สำหรับสูตร",
+
+["Stock Up Spares"]="เก็บสำรองไว้",
+
+["Mutation Shards"]="ชาร์ดกลายพันธุ์",
+
+["Auto Mutation Shards"]="ออโต้ชาร์ดกลายพันธุ์",
+
+["Shard Type"]="ประเภทชาร์ด",
+
+["Fractured (Boss)"]="Fractured (บอส)",
+
+["Scrambled"]="สแครมเบิล",
+
+["Shard Eggs"]="ไข่สำหรับชาร์ด",
+
+["Shard Min $/s (0 = any)"]=
+"รายได้ขั้นต่ำของชาร์ด $/วิ (0 = ไม่จำกัด)",
+
+["Shards"]="ชาร์ด",
+
+
+--========================================================
+-- BF V1.7.9 - ENCHANTED UPDATE
+--========================================================
+
+["Enchanted"]="มนตรา",
+
+["Wisp"]="วิสป์",
+
+["Auto Wisp Quests"]=
+"ออโต้ทำเควสต์ Wisp",
+
+["Steal Wisp Quest Eggs"]=
+"ขโมยไข่เควสต์ Wisp",
+
+["Butterflies"]="ผีเสื้อ",
+
+["Auto Claim Net"]=
+"ออโต้รับตาข่าย",
+
+["Auto Catch Butterflies"]=
+"ออโต้จับผีเสื้อ",
+
+["Bloom"]="ดอกไม้บาน",
+
+["Essence"]="เอสเซนส์",
+
+["Auto Essence"]=
+"ออโต้เอสเซนส์",
+
+["Auto Trade Up"]=
+"ออโต้แลกอัปเกรด",
+
+["Trades"]="รายการแลก",
+
+["Trade Up"]="แลกอัปเกรด",
+
+["Green"]="เขียว",
+["Blue"]="น้ำเงิน",
+["Purple"]="ม่วง",
+["Gold"]="ทอง",
+["Golden"]="ทอง",
+
+["Green -> Blue"]=
+"เขียว → น้ำเงิน",
+
+["Blue -> Purple"]=
+"น้ำเงิน → ม่วง",
+
+["Purple -> Golden"]=
+"ม่วง → ทอง",
+
+["Purple -> Gold"]=
+"ม่วง → ทอง",
+
+["Green -> Blue, Blue -> Purple, Purple -> Golden"]=
+"เขียว → น้ำเงิน, น้ำเงิน → ม่วง, ม่วง → ทอง",
+
+["Green -> Blue, Blue -> Purple, Purple -> Gold"]=
+"เขียว → น้ำเงิน, น้ำเงิน → ม่วง, ม่วง → ทอง",
+
+["Banjo Cricket"]=
+"จิ้งหรีดแบนโจ",
+
+["Auto Banjo Cricket"]=
+"ออโต้จิ้งหรีดแบนโจ",
+
+
+-- PETS
+["Income"]="รายได้",
+
+["Auto Equip Pets"]="ออโต้ใส่สัตว์เลี้ยง",
+
+["Auto Equip Pets Interval"]="ช่วงเวลาออโต้ใส่สัตว์เลี้ยง",
+
+["Claim Offline Earnings"]="รับรายได้ตอนออฟไลน์",
+
+["Top 10 Eggs"]="ไข่ 10 อันดับแรก",
+
+["Sell"]="ขาย",
+
+["Sell Categories"]="หมวดที่จะขาย",
+
+["Sell Rarities"]="ระดับความหายากที่จะขาย",
+
+["Sell Mutations"]="การกลายพันธุ์ที่จะขาย",
+
+["Auto Sell Selected"]="ออโต้ขายตัวที่เลือก",
+
+["Auto Sell All Eligible"]="ออโต้ขายทุกตัวที่เข้าเงื่อนไข",
+
+["Auto Unequip for Selling"]=
+"ถอดสัตว์เลี้ยงอัตโนมัติก่อนขาย",
+
+["Sell Pets Below $/s (put so it will work)"]=
+"ขายสัตว์เลี้ยงที่รายได้ต่ำกว่า $/วิ (ใส่ค่าเพื่อให้ทำงาน)",
+
+["Sell Pets Below /s (put so it will work)"]=
+"ขายสัตว์เลี้ยงที่รายได้ต่ำกว่าค่าที่กำหนด (ใส่ค่าเพื่อให้ทำงาน)",
+
+["Keep Best (never sell)"]="เก็บตัวที่ดีที่สุดไว้ (ไม่ขาย)",
+
+["Sell Delay (per sale, pets + eggs)"]=
+"เวลาหน่วงการขาย (ต่อครั้ง สัตว์เลี้ยง + ไข่)",
+
+
+-- SETTINGS MENU
+["Menu"]="เมนู",
+
+["Toggle menu"]="ปุ่มเปิด/ปิดเมนู",
+
+["Auto hide UI after execute"]=
+"ซ่อน UI อัตโนมัติหลังรัน",
+
+["Watermark"]="ลายน้ำ",
+
+["Mobile toggle button"]=
+"ปุ่มเปิด/ปิดเมนูบนมือถือ",
+
+["Dim background"]="ทำพื้นหลังให้มืด",
+
+["Weather area"]="พื้นที่เอฟเฟกต์สภาพอากาศ",
+
+["Inside UI"]="ภายใน UI",
+["Whole screen"]="ทั้งหน้าจอ",
+
+["Weather amount"]="ปริมาณเอฟเฟกต์สภาพอากาศ",
+
+["Weather size"]="ขนาดเอฟเฟกต์สภาพอากาศ",
+
+["Draggable cards"]="ลากการ์ดได้",
+
+["Collapse sidebar"]="ย่อแถบด้านข้าง",
+
+["Reset card layout"]="รีเซ็ตตำแหน่งการ์ด",
+
+["Auto scale to screen"]="ปรับขนาดตามหน้าจออัตโนมัติ",
+
+["UI scale"]="ขนาด UI",
+
+["Font"]="ฟอนต์",
+
+["Unload"]="ปิดสคริปต์",
+
+["Rain"]="ฝน",
+["Petals"]="กลีบดอกไม้",
+["Hearts"]="หัวใจ",
+["Stars"]="ดาว",
+["Leaves"]="ใบไม้",
+
+
+-- WALLPAPER / ICON / PATTERN
+["Risky"]="อันตราย",
+
+["wallpaper"]="วอลเปเปอร์",
+["Wallpaper"]="วอลเปเปอร์",
+
+["Wallpaper dim"]="ความมืดวอลเปเปอร์",
+
+["Apply wallpaper"]="ใช้วอลเปเปอร์",
+
+["icon"]="ไอคอน",
+["Icon"]="ไอคอน",
+
+["Apply icon"]="ใช้ไอคอน",
+
+["pattern"]="ลวดลาย",
+["Pattern"]="ลวดลาย",
+
+["Pattern strength"]="ความเข้มลวดลาย",
+
+["Dots"]="ลายจุด",
+["Grid"]="ลายตาราง",
+["Diagonal"]="ลายทแยง",
+["Noise"]="ลายสุ่ม",
+
+["your themes"]="ธีมของคุณ",
+
+["theme name"]="ชื่อธีม",
+
+["Create saves the colours on screen under the name; pick it in Preset to use it."]=
+"สร้างจะบันทึกสีบนหน้าจอด้วยชื่อนี้ แล้วเลือกใช้ได้จาก Preset",
+
+["Copy code"]="คัดลอกโค้ด",
+
+["paste a theme code..."]="วางโค้ดธีม...",
+
+["Save theme"]="บันทึกธีม",
+
+
+-- CONFIG
+["config name"]="ชื่อคอนฟิก",
+
+["Set autoload"]="ตั้งให้โหลดอัตโนมัติ",
+
+["Clear autoload"]="ล้างการโหลดอัตโนมัติ",
+
+["Autoload mode"]="โหมดโหลดอัตโนมัติ",
+
+["Autosave loaded config"]=
+"บันทึกคอนฟิกที่โหลดอยู่แบบอัตโนมัติ",
+
+["All accounts"]="ทุกบัญชี",
+
+["Per account"]="แยกตามบัญชี",
+
+["share"]="แชร์",
+
+["paste a config code..."]="วางโค้ดคอนฟิก...",
+
+
+-- THEME
+["Preset"]="พรีเซ็ต",
+
+["Window glow"]="แสงเรืองหน้าต่าง",
+
+["Element glow"]="แสงเรืององค์ประกอบ",
+
+["Card opacity"]="ความทึบของการ์ด",
+
+["Window opacity"]="ความทึบของหน้าต่าง",
+
+["gradient"]="ไล่สี",
+
+["Accent gradient"]="ไล่สี Accent",
+
+["Gradient angle"]="มุมไล่สี",
+
+["Shimmer"]="ประกาย",
+
+["Window gradient"]="ไล่สีหน้าต่าง",
+
+["Background"]="พื้นหลัง",
+
+["Panel"]="พาเนล",
+
+["Hover"]="สีเมื่อชี้",
+
+["Outline"]="เส้นขอบ",
+
+["Accent"]="สีเด่น",
+
+["Accent 2"]="สีเด่น 2",
+
+["Text"]="ตัวหนังสือ",
+
+["DimText"]="ตัวหนังสือรอง",
+
+["Hovered Element"]="องค์ประกอบตอนชี้",
+
+["Element"]="องค์ประกอบ",
+
+["Section"]="หมวด",
+
+["Tab"]="แท็บ",
+
+["Inactive Text"]="ข้อความที่ไม่ได้เลือก",
+
+
+-- WEBHOOK
+["Enable Webhook"]="เปิดใช้งาน Webhook",
+
+["Webhook URL"]="URL Webhook",
+
+["Discord User ID"]="Discord User ID",
+
+["Discord User ID (ping)"]=
+"Discord User ID (สำหรับแท็ก)",
+
+["Mention @everyone"]="แท็ก @everyone",
+
+["Ping @everyone"]="แท็ก @everyone",
+
+["Trade-In Webhook"]="Webhook การแลก",
+
+["Send Test Post"]="ส่งข้อความทดสอบ",
+
+["Send Test"]="ส่งทดสอบ",
+
+["Notify Filter"]="ตัวกรองแจ้งเตือน",
+
+["Min Fuse Result $/s"]=
+"ผลผสมขั้นต่ำ $/วิ",
+
+["Min Fuse Result $/s (0 = every fuse)"]=
+"ผลผสมขั้นต่ำ $/วิ (0 = ทุกการผสม)",
+
+
+-- MUTATION OPTIONS
+["Boss"]="บอส",
+["Golden"]="ทอง",
+["GreatBloom"]="Great Bloom",
+["Sakura"]="ซากุระ",
+["Scrambled"]="สแครมเบิล",
+["Silver"]="เงิน",
+
+
+-- DASHBOARD
+["Report To Dashboard"]="รายงานไปยังแดชบอร์ด",
+
+["Dashboard Key"]="คีย์แดชบอร์ด",
+
+["Send Report Now"]="ส่งรายงานตอนนี้",
+
+["Setup"]="ตั้งค่าการเชื่อมต่อ",
+
+["How To Connect"]="วิธีเชื่อมต่อ",
+
+["Needs Premium to Use!"]="ต้องใช้ Premium!",
+
+["1. Open bigfroot.dev and sign in with Discord."]=
+"1. เปิด bigfroot.dev และเข้าสู่ระบบด้วย Discord",
+
+["2. Copy the key it shows you."]=
+"2. คัดลอกคีย์ที่เว็บแสดงให้",
+
+["3. Paste it above, then turn on Report To Dashboard."]=
+"3. วางคีย์ด้านบน แล้วเปิด รายงานไปยังแดชบอร์ด",
+
+
+-- OLD BF / GREAT BLOOM
+["Great Bloom"]="Great Bloom",
+
+["Auto Great Bloom"]="ออโต้ Great Bloom",
+
+["Auto Insert Egg"]="ออโต้ใส่ไข่",
+
+["Auto Deposit"]="ออโต้ฝาก",
+
+["Auto Mutate"]="ออโต้กลายพันธุ์",
+
+["Mutate At %"]="กลายพันธุ์เมื่อถึง %",
+
+["Remove After Mutating"]="นำออกหลังกลายพันธุ์",
+
+["Incubator"]="เครื่องฟัก",
+["Incubators"]="เครื่องฟัก",
+
+["Weather"]="สภาพอากาศ",
+
+["Event"]="กิจกรรม",
+
+["Frost"]="น้ำแข็ง",
+
+["Magma"]="แมกมา",
+
+["Blood Night"]="คืนสีเลือด",
+
+["Hourly Event"]="กิจกรรมรายชั่วโมง",
+
+["Egg Spawns"]="การเกิดไข่",
+
+["Prediction is patched"]="ระบบคาดการณ์ถูกแก้แล้ว",
+
+
+-- CONFIG OLD
+["Create Config"]="สร้างคอนฟิก",
+["Delete Config"]="ลบคอนฟิก",
+["Load Config"]="โหลดคอนฟิก",
+["Save Config"]="บันทึกคอนฟิก",
+
+["Auto Load Selected"]="โหลดคอนฟิกที่เลือกอัตโนมัติ",
+
+["Auto Load Mode"]="โหมดโหลดคอนฟิกอัตโนมัติ",
+
+["UI Bind"]="ปุ่มเปิด/ปิด UI",
+
+["Animation Style"]="รูปแบบแอนิเมชัน",
+
+["Animation Direction"]="ทิศทางแอนิเมชัน",
+
+["Animation Time"]="เวลาแอนิเมชัน",
+
+["Share Configs"]="แชร์คอนฟิก",
+
+["Copy Selected Config"]="คัดลอกคอนฟิกที่เลือก",
+
+["Import Code"]="นำเข้าโค้ด",
+
+["Import Config"]="นำเข้าคอนฟิก",
+
+
+-- RARITIES
+["Common"]="ธรรมดา",
+["Uncommon"]="ไม่ธรรมดา",
+["Rare"]="แรร์",
+["Epic"]="อีพิก",
+["Legendary"]="เลเจนดารี",
+["Mythic"]="มิธิค",
+["Mythical"]="มิธิค",
+["Cosmic"]="คอสมิก",
+["Celestial"]="เซเลสเชียล",
+["Divine"]="ดีไวน์",
+["Superior"]="ซูพีเรียร์",
+["Eternal"]="อีเทอร์นัล",
+["Secret"]="ซีเคร็ต",
+["Limited"]="ลิมิเต็ด",
+["Exclusive"]="เอ็กซ์คลูซีฟ",
+["Exotic"]="เอ็กโซติก",
+["Titan"]="ไททัน",
+["Rainbow"]="เรนโบว์",
+
 }
-local EYE = "rbxassetid://85580956675001"
-local BOLD = Enum.Font.GothamBold
-local NORMAL = Enum.Font.Gotham
 
-local function make(kind, parent, props)
-    local obj = Instance.new(kind)
-    for k, v in pairs(props or {}) do obj[k] = v end
-    obj.Parent = parent
-    return obj
+
+--========================================================
+-- LOOKUP
+--========================================================
+
+local LOWER={}
+
+for en,th in pairs(T) do
+    LOWER[string.lower(en)]=th
 end
-local function corner(parent, radius)
-    return make("UICorner", parent, {CornerRadius = UDim.new(0, radius)})
+
+
+--========================================================
+-- HELPERS
+--========================================================
+
+local function IsText(o)
+    return
+        o:IsA("TextLabel")
+        or o:IsA("TextButton")
+        or o:IsA("TextBox")
 end
-local function outline(parent, color, thick, opacity)
-    return make("UIStroke", parent, {
-        Color = color or COLORS.outline,
-        Thickness = thick or 1,
-        Transparency = opacity or 0,
-    })
+
+
+local function GetRawText(o)
+
+    if not IsText(o) then
+        return ""
+    end
+
+    local ok,t=pcall(function()
+        return o.Text
+    end)
+
+    if ok and type(t)=="string" then
+        return t
+    end
+
+    return ""
 end
-local function text(parent, title, size, bold, color, props)
-    local defaults = {
-        BackgroundTransparency = 1,
-        Text = title,
-        Font = bold and BOLD or NORMAL,
-        TextSize = size or 13,
-        TextColor3 = color or COLORS.white,
-        TextXAlignment = Enum.TextXAlignment.Left,
-        TextYAlignment = Enum.TextYAlignment.Center,
-        TextWrapped = true,
-        BorderSizePixel = 0,
+
+
+local function Clean(text)
+
+    if type(text)~="string" then
+        return ""
+    end
+
+    return
+        text
+        :gsub("<[^>]+>","")
+        :match("^%s*(.-)%s*$")
+        or text
+end
+
+
+local function EscapePattern(s)
+
+    return tostring(s)
+        :gsub("([^%w])","%%%1")
+end
+
+
+--========================================================
+-- TRANSLATE ONE LINE
+--========================================================
+
+local function TranslateLine(line)
+
+    if type(line)~="string" or line=="" then
+        return line
+    end
+
+
+    local lead=line:match("^(%s*)") or ""
+    local tail=line:match("(%s*)$") or ""
+    local c=line:match("^%s*(.-)%s*$") or line
+
+    if c=="" then
+        return line
+    end
+
+
+    -- EXACT
+    local exact=LOWER[string.lower(c)]
+
+    if exact then
+        return lead..exact..tail
+    end
+
+
+    -- RICHTEXT
+    local plain=
+        c:gsub("<[^>]+>","")
+
+    local exactPlain=
+        LOWER[string.lower(plain)]
+
+    if exactPlain then
+
+        if plain~=c then
+
+            local replaced=
+                c:gsub(
+                    EscapePattern(plain),
+                    exactPlain,
+                    1
+                )
+
+            return lead..replaced..tail
+        end
+
+        return lead..exactPlain..tail
+    end
+
+
+    --====================================================
+    -- DYNAMIC
+    --====================================================
+
+    local n=
+        plain:match("^(%d+)%s+selected$")
+
+    if n then
+        return lead.."เลือกแล้ว "..n.." รายการ"..tail
+    end
+
+
+    local a,b=
+        plain:match("^Players%s+(%d+)%/(%d+)$")
+
+    if a then
+        return lead.."ผู้เล่น "..a.."/"..b..tail
+    end
+
+
+    a,b=
+        plain:match("^(%d+)%s*/%s*(%d+)%s+players$")
+
+    if a then
+        return lead..a.."/"..b.." ผู้เล่น"..tail
+    end
+
+
+    local quick=
+        plain:match("^Quick Bar%s*(%d+)$")
+
+    if quick then
+        return lead.."แถบด่วน "..quick..tail
+    end
+
+
+    local value=
+        plain:match("^Last Steal:%s*(.+)$")
+
+    if value then
+        return lead.."ขโมยล่าสุด: "..value..tail
+    end
+
+
+    value=
+        plain:match("^Last Issue:%s*(.+)$")
+
+    if value then
+        return lead.."ปัญหาล่าสุด: "..value..tail
+    end
+
+
+    value=
+        plain:match("^Last Sell:%s*(.+)$")
+
+    if value then
+        return lead.."ขายล่าสุด: "..value..tail
+    end
+
+
+    value=
+        plain:match("^Last Fuse:%s*(.+)$")
+
+    if value then
+        return lead.."ผสมล่าสุด: "..value..tail
+    end
+
+
+    value=
+        plain:match("^Last claim:%s*(.+)$")
+
+    if value then
+        return lead.."รับล่าสุด: "..value..tail
+    end
+
+
+    local matches=
+        plain:match("^Matches:%s*(%d+)$")
+
+    if matches then
+        return lead.."ตรงเงื่อนไข: "..matches..tail
+    end
+
+
+    value=
+        plain:match("^Carrying:%s*(.+)$")
+
+    if value then
+
+        if value:lower()=="yes" then
+            value="ใช่"
+
+        elseif value:lower()=="no" then
+            value="ไม่"
+        end
+
+        return lead.."กำลังถือ: "..value..tail
+    end
+
+
+    value=
+        plain:match("^Stolen this session:%s*(.+)$")
+
+    if value then
+        return lead.."ขโมยได้ในเซสชันนี้: "..value..tail
+    end
+
+
+    value=
+        plain:match("^([%d%.]+)%s+studs/s$")
+
+    if value then
+        return lead..value.." studs/วินาที"..tail
+    end
+
+
+    local expires=
+        plain:match("^Expires:%s*(.+)$")
+
+    if expires then
+        return lead.."หมดอายุ: "..expires..tail
+    end
+
+
+    local features=
+        plain:match("^(%d+)%s+features on$")
+
+    if features then
+        return lead..features.." ฟีเจอร์ที่เปิด"..tail
+    end
+
+
+    local fps=
+        plain:match("^(%d+)%s+fps$")
+
+    if fps then
+        return lead..fps.." FPS"..tail
+    end
+
+
+    local ping=
+        plain:match("^([%d%.]+)%s+ms%s+ping$")
+
+    if ping then
+        return lead..ping.." ms ปิง"..tail
+    end
+
+
+    local keytime=
+        plain:match("^(.+)%s+key time$")
+
+    if keytime then
+        return lead..keytime.." เวลาคีย์"..tail
+    end
+
+
+    local sessiontime=
+        plain:match("^(.+)%s+session$")
+
+    if sessiontime then
+        return lead..sessiontime.." เวลาใช้งาน"..tail
+    end
+
+
+    local eggcount,where=
+        plain:match(
+            "^Showing%s+(%d+)%s+egg%(s%):%s*(.+)$"
+        )
+
+    if eggcount then
+
+        where=
+            where:gsub(
+                "your plot",
+                "ฐานของคุณ"
+            )
+
+        return
+            lead
+            .."กำลังแสดงไข่ "
+            ..eggcount
+            .." ฟอง: "
+            ..where
+            ..tail
+    end
+
+
+    local trios=
+        plain:match(
+            "^Ready to fuse:%s*(%d+)%s+trios$"
+        )
+
+    if trios then
+
+        return
+            lead
+            .."พร้อมผสม: "
+            ..trios
+            .." ชุด"
+            ..tail
+    end
+
+
+    local scrambleTime=
+        plain:match(
+            "^Next Dr%. Scramble fight in%s+(.+)%s+%(estimated%)%.$"
+        )
+
+    if scrambleTime then
+
+        return
+            lead
+            .."Dr. Scramble ครั้งถัดไปใน "
+            ..scrambleTime
+            .." (โดยประมาณ)"
+            ..tail
+    end
+
+
+    local income,count=
+        plain:match(
+            "^Equipped:%s*(.-)%s*%(%s*(%d+)%s+pets%s*%)$"
+        )
+
+    if income then
+
+        return
+            lead
+            .."ที่สวมใส่: "
+            ..income
+            .." ("
+            ..count
+            .." ตัว)"
+            ..tail
+    end
+
+
+    income,count=
+        plain:match(
+            "^Inventory total:%s*(.-)%s*%(%s*(%d+)%s+pets%s*%)$"
+        )
+
+    if income then
+
+        return
+            lead
+            .."รวมในกระเป๋า: "
+            ..income
+            .." ("
+            ..count
+            .." ตัว)"
+            ..tail
+    end
+
+
+    value=
+        plain:match("^Pets:%s*(.+)$")
+
+    if value then
+        return lead.."สัตว์เลี้ยง: "..value..tail
+    end
+
+
+    value=
+        plain:match("^Eggs:%s*(.+)$")
+
+    if value then
+        return lead.."ไข่: "..value..tail
+    end
+
+
+    value=
+        plain:match("^All:%s*(.+)$")
+
+    if value then
+        return lead.."รวมทั้งหมด: "..value..tail
+    end
+
+
+    -- CONFIG STATUS
+    local loaded,autoload=
+        plain:match(
+            "^loaded:%s*(.-)%s*|%s*autoload:%s*(.+)$"
+        )
+
+    if loaded then
+
+        if loaded=="none" then
+            loaded="ไม่มี"
+        end
+
+        return
+            lead
+            .."โหลดแล้ว: "
+            ..loaded
+            .." | โหลดอัตโนมัติ: "
+            ..autoload
+            ..tail
+    end
+
+
+    --====================================================
+    -- PARTIAL
+    --====================================================
+
+    local r=c
+
+    local P={
+
+        {"Capture Egg","จับไข่"},
+        {"Safety","ความปลอดภัย"},
+        {"Status","สถานะ"},
+        {"Session","เซสชัน"},
+
+        {"Auto Steal Eggs","ออโต้ขโมยไข่"},
+        {"Auto Capture Egg","ออโต้จับไข่"},
+
+        {"Auto Place Selected","ออโต้วางไข่ที่เลือก"},
+        {"Auto Place All","ออโต้วางไข่ทั้งหมด"},
+        {"Auto Hatch Ready","ออโต้ฟักไข่ที่พร้อม"},
+        {"Auto Sell Eggs","ออโต้ขายไข่"},
+
+        {"Auto Upgrade Pen","ออโต้อัปเกรดคอก"},
+        {"Auto Treadmill Training","ออโต้ฝึกลู่วิ่ง"},
+        {"Auto Treadmill Upgrade","ออโต้อัปเกรดลู่วิ่ง"},
+
+        {"Auto Buy Selected Trails","ออโต้ซื้อ Trail ที่เลือก"},
+        {"Auto Buy All Cash Trails","ออโต้ซื้อ Trail ที่ใช้เงินสดทั้งหมด"},
+        {"Auto Equip Best Trail","ออโต้ใส่ Trail ที่ดีที่สุด"},
+        {"Auto Equip Best Gear","ออโต้ใส่อุปกรณ์ที่ดีที่สุด"},
+        {"Auto Claim Index Rewards","ออโต้รับรางวัล Index"},
+        {"Auto Claim Group Reward","ออโต้รับรางวัลกลุ่ม"},
+
+        {"Inventory Value ESP","ESP มูลค่าของในกระเป๋า"},
+        {"Delete Pets %(FPS BOOST%)","ซ่อนสัตว์เลี้ยง (เพิ่ม FPS)"},
+
+        {"Auto Fuse Selected","ออโต้ผสมตัวที่เลือก"},
+        {"Auto Fuse All Eligible","ออโต้ผสมทุกตัวที่เข้าเงื่อนไข"},
+
+        {"Auto Equip Best Bat","ออโต้ใส่ไม้ตีที่ดีที่สุด"},
+
+        {"Rarest Drones First","เก็บโดรนที่หายากที่สุดก่อน"},
+        {"Auto Fight Boss","ออโต้ตีบอส"},
+        {"Auto Claim Mastery","ออโต้รับ Mastery"},
+
+        {"Scrambled Mutation","การกลายพันธุ์ Scrambled"},
+
+        {"Biohazard Pets","สัตว์เลี้ยง Biohazard"},
+        {"Experimental Pets","สัตว์เลี้ยงทดลอง"},
+
+        {"Auto Steal Recipe Eggs","ออโต้ขโมยไข่สำหรับสูตร"},
+        {"Auto Mutation Shards","ออโต้ชาร์ดกลายพันธุ์"},
+        {"Shards","ชาร์ด"},
+
+        {"Auto Equip Pets","ออโต้ใส่สัตว์เลี้ยง"},
+        {"Claim Offline Earnings","รับรายได้ตอนออฟไลน์"},
+
+        {"Auto Sell Selected","ออโต้ขายตัวที่เลือก"},
+        {"Auto Sell All Eligible","ออโต้ขายทุกตัวที่เข้าเงื่อนไข"},
+        {"Auto Unequip for Selling","ถอดสัตว์เลี้ยงอัตโนมัติก่อนขาย"},
+
+        {"Only Mutated Eggs","เฉพาะไข่ที่กลายพันธุ์"},
+        {"Skip Contested Eggs","ข้ามไข่ที่มีผู้เล่นอื่นกำลังแย่ง"},
+        {"Always Steal Dragon Eggs","ขโมยไข่มังกรเสมอ"},
+
+        {"Auto Execute","เปิดสคริปต์อัตโนมัติ"},
+        {"Auto Reconnect","เชื่อมต่อใหม่อัตโนมัติ"},
+
+        {"Auto Great Bloom","ออโต้ Great Bloom"},
+        {"Auto Insert Egg","ออโต้ใส่ไข่"},
+        {"Auto Deposit","ออโต้ฝาก"},
+        {"Auto Mutate","ออโต้กลายพันธุ์"},
+        {"Remove After Mutating","นำออกหลังกลายพันธุ์"},
+
+        {"Anti Treadmill","กันลู่วิ่ง"},
+        {"Anti Guard","ป้องกันยาม"},
+        {"Anti Knockback","กันกระเด็น"},
+        {"Anti Knock Back","กันกระเด็น"},
+        {"Anti Ragdoll","กันล้ม"},
+
+        {"God Mode","โหมดป้องกัน"},
+
+        {"Return To Last Position","กลับตำแหน่งล่าสุด"},
+        {"Return to Last Position","กลับตำแหน่งล่าสุด"},
+        {"Return To Plot","กลับฐาน"},
+        {"Return to Plot","กลับฐาน"},
+
+        {"Notify Filter","ตัวกรองแจ้งเตือน"},
+
+        {"Report To Dashboard","รายงานไปยังแดชบอร์ด"},
+        {"Dashboard Key","คีย์แดชบอร์ด"},
+        {"Send Report Now","ส่งรายงานตอนนี้"},
+        {"How To Connect","วิธีเชื่อมต่อ"},
+        {"Needs Premium to Use!","ต้องใช้ Premium!"},
+
+        {"Autosave loaded config","บันทึกคอนฟิกที่โหลดอยู่แบบอัตโนมัติ"},
+        {"Refresh list","รีเฟรชรายการ"},
+
+        {"Whole screen","ทั้งหน้าจอ"},
+
+        {"Rain","ฝน"},
+        {"Petals","กลีบดอกไม้"},
+        {"Hearts","หัวใจ"},
+        {"Stars","ดาว"},
+        {"Leaves","ใบไม้"},
+
+        {"Dots","ลายจุด"},
+        {"Grid","ลายตาราง"},
+        {"Diagonal","ลายทแยง"},
+        {"Noise","ลายสุ่ม"},
+
+        {"GreatBloom","Great Bloom"},
+        {"Golden","ทอง"},
+        {"Silver","เงิน"},
+
+        -- BF V1.7.9 ENCHANTED
+        {"Auto Wisp Quests","ออโต้ทำเควสต์ Wisp"},
+        {"Steal Wisp Quest Eggs","ขโมยไข่เควสต์ Wisp"},
+        {"Auto Claim Net","ออโต้รับตาข่าย"},
+        {"Auto Catch Butterflies","ออโต้จับผีเสื้อ"},
+        {"Auto Essence","ออโต้เอสเซนส์"},
+        {"Auto Trade Up","ออโต้แลกอัปเกรด"},
+        {"Auto Banjo Cricket","ออโต้จิ้งหรีดแบนโจ"},
+
+        {"Green %-%> Blue","เขียว → น้ำเงิน"},
+        {"Blue %-%> Purple","น้ำเงิน → ม่วง"},
+        {"Purple %-%> Golden","ม่วง → ทอง"},
+        {"Purple %-%> Gold","ม่วง → ทอง"},
+
+        {"Prediction is patched","ระบบคาดการณ์ถูกแก้แล้ว"},
+
+        {"Legendary","เลเจนดารี"},
+        {"Mythical","มิธิค"},
+        {"Mythic","มิธิค"},
+        {"Divine","ดีไวน์"},
+        {"Eternal","อีเทอร์นัล"},
+        {"Secret","ซีเคร็ต"},
+
+        {"Abyss Ocean","มหาสมุทรอเวจี"},
+        {"Cherry Blossom","ซากุระ"},
+        {"Light Dark","ไลท์ดาร์ก"},
+        {"Prehistoric","ยุคดึกดำบรรพ์"},
+        {"Titan Temple","วิหารไททัน"},
+        {"Volcano","ภูเขาไฟ"},
+        {"Desert","ทะเลทราย"},
+        {"Forest","ป่า"},
+        {"Jungle","ป่าดิบ"},
+        {"Lake","ทะเลสาบ"},
+        {"Snow","หิมะ"},
     }
-    for k, v in pairs(props or {}) do defaults[k] = v end
-    return make("TextLabel", parent, defaults)
-end
 
-local gui = make("ScreenGui", playerGui, {
-    Name = GUI_NAME,
-    ResetOnSpawn = false,
-    IgnoreGuiInset = true,
-    ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
-    DisplayOrder = 180,
-})
 
-local icon = make("ImageButton", gui, {
-    Name = "ZIGZAG_EYE_ICON",
-    AnchorPoint = Vector2.new(0, 0.5),
-    Position = UDim2.new(0, 16, 0.5, 0),
-    Size = UDim2.fromOffset(58, 58),
-    BackgroundColor3 = COLORS.background,
-    Image = EYE,
-    ScaleType = Enum.ScaleType.Crop,
-    ClipsDescendants = true,
-    AutoButtonColor = true,
-    ZIndex = 90,
-})
-corner(icon, 16)
-outline(icon, COLORS.purple, 2, 0)
-local badge = text(gui, "ZIGZAG", 10, true, COLORS.background, {
-    BackgroundTransparency = 0,
-    BackgroundColor3 = COLORS.purple,
-    TextXAlignment = Enum.TextXAlignment.Center,
-    Position = UDim2.new(0, 19, 0.5, 37),
-    Size = UDim2.fromOffset(53, 18),
-    ZIndex = 91,
-})
-corner(badge, 7)
-
-local panel = make("Frame", gui, {
-    Name = "ZIGZAG_PANEL",
-    AnchorPoint = Vector2.new(0.5, 0.5),
-    Position = UDim2.fromScale(0.5, 0.5),
-    Size = UDim2.fromOffset(620, 400),
-    BackgroundColor3 = COLORS.background,
-    BorderSizePixel = 0,
-    ClipsDescendants = true,
-    ZIndex = 10,
-})
-corner(panel, 18)
-outline(panel, COLORS.outline, 1.5, 0.05)
-local scaler = make("UIScale", panel, { Scale = 1 })
-
-local wallpaper = make("ImageLabel", panel, {
-    Name = "MANGA_EYE_WALLPAPER",
-    BackgroundTransparency = 1,
-    Size = UDim2.fromScale(1, 1),
-    Image = EYE,
-    ImageTransparency = 0.89,
-    ScaleType = Enum.ScaleType.Crop,
-    ZIndex = 11,
-})
-local topShade = make("Frame", panel, {
-    Position = UDim2.fromOffset(0, 0),
-    Size = UDim2.new(1, 0, 0, 72),
-    BorderSizePixel = 0,
-    BackgroundColor3 = COLORS.panel,
-    BackgroundTransparency = 0.14,
-    ZIndex = 12,
-})
-make("UIGradient", topShade, {
-    Rotation = 90,
-    Transparency = NumberSequence.new({
-        NumberSequenceKeypoint.new(0, 0.05),
-        NumberSequenceKeypoint.new(1, 1),
-    }),
-})
-local header = make("Frame", panel, {
-    BackgroundTransparency = 1,
-    Size = UDim2.new(1, 0, 0, 70),
-    ZIndex = 22,
-})
-local headerEye = make("ImageLabel", header, {
-    Position = UDim2.fromOffset(16, 13),
-    Size = UDim2.fromOffset(45, 45),
-    BackgroundColor3 = COLORS.surface,
-    Image = EYE,
-    ScaleType = Enum.ScaleType.Crop,
-    ZIndex = 23,
-})
-corner(headerEye, 13)
-outline(headerEye, COLORS.purple, 1.5, 0)
-text(header, "ZIGZAG  HUB", 22, true, COLORS.white, {
-    Position = UDim2.fromOffset(73, 12),
-    Size = UDim2.fromOffset(290, 30),
-    ZIndex = 23,
-})
-text(header, "MANGA EYE  •  EGG COMMAND  •  V4", 10, false, COLORS.muted, {
-    Position = UDim2.fromOffset(74, 40),
-    Size = UDim2.fromOffset(315, 18),
-    ZIndex = 23,
-})
-local minimize = make("TextButton", header, {
-    Position = UDim2.new(1, -49, 0, 20),
-    Size = UDim2.fromOffset(30, 30),
-    BackgroundColor3 = COLORS.surface,
-    BorderSizePixel = 0,
-    Text = "—",
-    Font = BOLD,
-    TextSize = 19,
-    TextColor3 = COLORS.white,
-    ZIndex = 24,
-})
-corner(minimize, 9)
-make("Frame", panel, {
-    Position = UDim2.fromOffset(16, 70),
-    Size = UDim2.new(1, -32, 0, 1),
-    BackgroundColor3 = COLORS.outline,
-    BackgroundTransparency = 0.45,
-    BorderSizePixel = 0,
-    ZIndex = 21,
-})
-
-local sidebar = make("ScrollingFrame", panel, {
-    Position = UDim2.fromOffset(12, 83),
-    Size = UDim2.new(0, 147, 1, -119),
-    BackgroundTransparency = 1,
-    BorderSizePixel = 0,
-    ScrollBarThickness = 3,
-    ScrollingDirection = Enum.ScrollingDirection.Y,
-    AutomaticCanvasSize = Enum.AutomaticSize.Y,
-    CanvasSize = UDim2.fromOffset(0, 0),
-    ZIndex = 20,
-})
-make("UIListLayout", sidebar, {
-    Padding = UDim.new(0, 9),
-    SortOrder = Enum.SortOrder.LayoutOrder,
-})
-local content = make("ScrollingFrame", panel, {
-    Position = UDim2.fromOffset(171, 83),
-    Size = UDim2.new(1, -184, 1, -115),
-    BorderSizePixel = 0,
-    BackgroundTransparency = 1,
-    ScrollBarThickness = 3,
-    ScrollBarImageColor3 = COLORS.purple,
-    ScrollingDirection = Enum.ScrollingDirection.Y,
-    AutomaticCanvasSize = Enum.AutomaticSize.Y,
-    CanvasSize = UDim2.fromOffset(0, 0),
-    ZIndex = 20,
-})
-local pad = make("UIPadding", content, {
-    PaddingRight = UDim.new(0, 7),
-    PaddingBottom = UDim.new(0, 12),
-})
-local stack = make("UIListLayout", content, {
-    SortOrder = Enum.SortOrder.LayoutOrder,
-    Padding = UDim.new(0, 9),
-})
-local footer = text(panel, "● ZIGZAG V4 • อิสระ • อ่านข้อมูลเกมเท่านั้น", 10, false, COLORS.mint, {
-    Position = UDim2.new(0, 16, 1, -26),
-    Size = UDim2.new(1, -32, 0, 17),
-    ZIndex = 24,
-})
-local function status(message, color)
-    footer.Text = "● " .. message
-    footer.TextColor3 = color or COLORS.mint
-end
-local function section(title, details)
-    local height = details and 73 or 46
-    local card = make("Frame", content, {
-        Size = UDim2.new(1, 0, 0, height),
-        BackgroundColor3 = COLORS.panel,
-        BackgroundTransparency = 0.08,
-        BorderSizePixel = 0,
-        ZIndex = 21,
-    })
-    corner(card, 12)
-    outline(card, COLORS.outline, 1, 0.5)
-    text(card, title, 16, true, COLORS.white, {
-        Position = UDim2.fromOffset(14, 8),
-        Size = UDim2.new(1, -28, 0, 25),
-        ZIndex = 22,
-    })
-    if details then
-        text(card, details, 11, false, COLORS.muted, {
-            Position = UDim2.fromOffset(14, 33),
-            Size = UDim2.new(1, -28, 0, 33),
-            TextYAlignment = Enum.TextYAlignment.Top,
-            ZIndex = 22,
-        })
+    for _,pair in ipairs(P) do
+        r=r:gsub(pair[1],pair[2])
     end
-    return card
-end
-local function item(title, details, accentColor)
-    local box = make("Frame", content, {
-        Size = UDim2.new(1, 0, 0, details and 77 or 53),
-        BackgroundColor3 = COLORS.surface,
-        BackgroundTransparency = 0.09,
-        BorderSizePixel = 0,
-        ZIndex = 21,
-    })
-    corner(box, 12)
-    outline(box, accentColor or COLORS.outline, 1, 0.59)
-    text(box, title, 14, true, COLORS.white, {
-        Position = UDim2.fromOffset(13, 9),
-        Size = UDim2.new(1, -26, 0, 20),
-        ZIndex = 22,
-    })
-    if details then
-        text(box, details, 11, false, COLORS.muted, {
-            Position = UDim2.fromOffset(13, 32),
-            Size = UDim2.new(1, -26, 0, 35),
-            TextYAlignment = Enum.TextYAlignment.Top,
-            ZIndex = 22,
-        })
+
+
+    if r~=c then
+        return lead..r..tail
     end
-    return box
-end
-local function action(title, description, caption, callback)
-    local box = make("Frame", content, {
-        Size = UDim2.new(1, 0, 0, 114),
-        BackgroundColor3 = COLORS.surface,
-        BackgroundTransparency = 0.08,
-        BorderSizePixel = 0,
-        ZIndex = 21,
-    })
-    corner(box, 12)
-    outline(box, COLORS.outline, 1, 0.6)
-    text(box, title, 14, true, COLORS.white, {
-        Position = UDim2.fromOffset(13, 6),
-        Size = UDim2.new(1, -26, 0, 25),
-        ZIndex = 22,
-    })
-    text(box, description, 11, false, COLORS.muted, {
-        Position = UDim2.fromOffset(13, 29),
-        Size = UDim2.new(1, -26, 0, 29),
-        TextYAlignment = Enum.TextYAlignment.Top,
-        ZIndex = 22,
-    })
-    local press = make("TextButton", box, {
-        Position = UDim2.new(0, 13, 1, -44),
-        Size = UDim2.new(1, -26, 0, 33),
-        BackgroundColor3 = COLORS.purple,
-        TextColor3 = COLORS.background,
-        Text = caption,
-        Font = BOLD,
-        TextSize = 12,
-        BorderSizePixel = 0,
-        ZIndex = 23,
-    })
-    corner(press, 9)
-    press.Activated:Connect(function()
-        if not gui.Parent then return end
-        local ok, err = pcall(callback)
-        if not ok then
-            warn("[ZIGZAG HUB V3] UI action:", err)
-            status("เมนูทำงานผิดพลาด", COLORS.yellow)
-        end
-    end)
-    return box
+
+
+    return line
 end
 
--- V3: Local-only UI configuration; no game state mutation.
-local preferences = {
-    eggPreview = false, eggMode = "ใกล้ที่สุด", eggLimit = 12,
-    minRarity = "ทั้งหมด", nameQuery = "", minValue = 0,
-    eggMarkers = false,
-    autoSteal = false, instantSteal = false, stealMode = "เดินปกติ", stealPriority = "มูลค่า",
-    autoPlace = false, placeRule = "เมื่อกลับฐาน", placePriority = "มูลค่า",
-    autoHatch = false, hatchMin = "ทั้งหมด", autoEquip = false,
-    autoSell = false, keepMutated = true, labAuto = false,
-    hopMode = "คนในห้องน้อย", autoHop = false,
-    compact = false,
+
+--========================================================
+-- MULTI LINE
+--========================================================
+
+local function Translate(text)
+
+    if type(text)~="string" or text=="" then
+        return text
+    end
+
+
+    if not text:find("\n",1,true) then
+        return TranslateLine(text)
+    end
+
+
+    local output={}
+
+
+    for line in (text.."\n"):gmatch("(.-)\n") do
+
+        table.insert(
+            output,
+            TranslateLine(line)
+        )
+    end
+
+
+    return table.concat(output,"\n")
+end
+
+
+--========================================================
+-- BF SIGNATURES
+--========================================================
+
+local SIGNATURES={
+
+"auto steal eggs",
+"auto capture egg",
+"contest flee range",
+"auto place selected",
+"auto hatch ready",
+"auto fuse selected",
+"auto equip pets",
+"auto great bloom",
+"remove after mutating",
+"auto insert egg",
+"auto mutate",
+"prediction is patched",
+"copy selected config",
+"auto load selected",
+"dr. scramble",
+"big egg filter",
+
 }
-local RARITIES = {"ทั้งหมด", "Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic", "Cosmic", "Celestial", "Divine", "Secret"}
-local RARITY_INDEX = {}
-for i, name in ipairs(RARITIES) do RARITY_INDEX[name:lower()] = i end
-local scannedEggs = {}
-local eggHighlights = {}
-local scannedCount = 0
-local eggLastScan = "ยังไม่สแกน"
-local featureStatus = "ระบบคำสั่งเกมยังไม่เชื่อมต่อ • ใช้ดูตัวเลือก/ตัวกรองก่อน"
 
-local function toggleControl(title, description, key, onChange)
-    local box = item(title, description)
-    box.Size = UDim2.new(1, 0, 0, 86)
-    local button = make("TextButton", box, {
-        Position = UDim2.new(1, -107, 1, -35), Size = UDim2.fromOffset(94, 27),
-        BackgroundColor3 = preferences[key] and COLORS.purple or COLORS.panel,
-        Text = preferences[key] and "เปิด" or "ปิด", Font = BOLD, TextSize = 12,
-        TextColor3 = COLORS.white, BorderSizePixel = 0, ZIndex = 23,
-    })
-    corner(button, 8)
-    button.Activated:Connect(function()
-        preferences[key] = not preferences[key]
-        button.Text = preferences[key] and "เปิด" or "ปิด"
-        button.BackgroundColor3 = preferences[key] and COLORS.purple or COLORS.panel
-        status("บันทึกค่าในหน้าต่าง: " .. title)
-        if onChange then onChange(preferences[key]) end
-    end)
-end
-local function dropdownControl(title, description, key, options, onChange)
-    local box = item(title, description)
-    box.Size = UDim2.new(1, 0, 0, 91)
-    local button = make("TextButton", box, {
-        Position = UDim2.new(0, 13, 1, -34), Size = UDim2.new(1, -26, 0, 27),
-        BackgroundColor3 = COLORS.panel, Text = tostring(preferences[key]) .. "  ▾",
-        Font = BOLD, TextSize = 12, TextColor3 = COLORS.purpleLight,
-        BorderSizePixel = 0, ZIndex = 23,
-    })
-    corner(button, 8)
-    button.Activated:Connect(function()
-        local index = table.find(options, preferences[key]) or 0
-        preferences[key] = options[(index % #options) + 1]
-        button.Text = tostring(preferences[key]) .. "  ▾"
-        status("เลือกโหมด: " .. tostring(preferences[key]))
-        if onChange then onChange(preferences[key]) end
-    end)
-end
-local function sliderControl(title, description, key, minimum, maximum, onChange)
-    local box = item(title, description)
-    box.Size = UDim2.new(1, 0, 0, 103)
-    local minus = make("TextButton", box, {
-        Position = UDim2.new(0, 13, 1, -36), Size = UDim2.fromOffset(43, 29),
-        BackgroundColor3 = COLORS.panel, Text = "−", Font = BOLD,
-        TextSize = 18, TextColor3 = COLORS.white, BorderSizePixel = 0, ZIndex = 23,
-    })
-    corner(minus, 8)
-    local value = text(box, tostring(preferences[key]), 14, true, COLORS.purpleLight, {
-        Position = UDim2.new(0, 62, 1, -36), Size = UDim2.new(1, -124, 0, 29),
-        TextXAlignment = Enum.TextXAlignment.Center, ZIndex = 23,
-    })
-    local plus = make("TextButton", box, {
-        Position = UDim2.new(1, -56, 1, -36), Size = UDim2.fromOffset(43, 29),
-        BackgroundColor3 = COLORS.panel, Text = "+", Font = BOLD,
-        TextSize = 18, TextColor3 = COLORS.white, BorderSizePixel = 0, ZIndex = 23,
-    })
-    corner(plus, 8)
-    local function change(delta)
-        preferences[key] = math.clamp(preferences[key] + delta, minimum, maximum)
-        value.Text = tostring(preferences[key])
-        status("ปรับค่าแสดงผล: " .. tostring(preferences[key]))
+
+local function IsBFSignature(text)
+
+    if type(text)~="string" then
+        return false
     end
-    minus.Activated:Connect(function() change(-1) end)
-    plus.Activated:Connect(function() change(1) end)
-end
 
 
--- The settings pages describe future gameplay modules. None of these toggles calls
--- game remotes or changes the player's movement. Mark them as configuration only.
-local function configToggle(title, detail, key)
-    toggleControl(title .. " • ตั้งค่าไว้", detail .. " (ยังไม่สั่งทำงานในเกม)", key)
-end
-local function configDropdown(title, detail, key, values)
-    dropdownControl(title, detail .. " (ตัวเลือกสำหรับระบบในอนาคต)", key, values)
-end
-local function configNote()
-    item("การทำงานจริง", featureStatus, COLORS.yellow)
-end
+    local lower=
+        string.lower(
+            Clean(text)
+        )
 
-local function inputControl(title, description, key, placeholder)
-    local box = item(title, description)
-    box.Size = UDim2.new(1, 0, 0, 106)
-    local field = make("TextBox", box, {
-        Position = UDim2.new(0, 13, 1, -38),
-        Size = UDim2.new(1, -26, 0, 30),
-        Text = tostring(preferences[key] or ""),
-        PlaceholderText = placeholder or "พิมพ์ข้อความ...",
-        ClearTextOnFocus = false,
-        Font = NORMAL, TextSize = 13,
-        TextColor3 = COLORS.white,
-        PlaceholderColor3 = COLORS.muted,
-        BackgroundColor3 = COLORS.panel,
-        BorderSizePixel = 0, ZIndex = 23,
-    })
-    corner(field, 8)
-    make("UIPadding", field, {PaddingLeft = UDim.new(0, 9), PaddingRight = UDim.new(0, 9)})
-    field.FocusLost:Connect(function()
-        if not gui.Parent then return end
-        if key == "minValue" then
-            local parsed = tonumber(field.Text) or 0
-            preferences[key] = math.max(0, math.floor(parsed))
-            field.Text = tostring(preferences[key])
-        else
-            preferences[key] = string.sub(field.Text, 1, 70)
-        end
-        status("บันทึกตัวกรอง " .. title)
-    end)
-    return field
-end
 
-local function isEggName(name)
-    local lower = string.lower(name)
-    return string.find(lower, "egg", 1, true) ~= nil or
-           string.find(name, "ไข่", 1, true) ~= nil
-end
-local function stringValue(obj, keys)
-    local attrs = obj:GetAttributes()
-    for _, key in ipairs(keys) do
-        local value = attrs[key]
-        if value ~= nil then return tostring(value) end
-        local child = obj:FindFirstChild(key)
-        if child and (child:IsA("StringValue") or child:IsA("NumberValue") or child:IsA("IntValue")) then
-            return tostring(child.Value)
+    for _,signature in ipairs(SIGNATURES) do
+
+        if lower:find(
+            signature,
+            1,
+            true
+        ) then
+
+            return true
         end
     end
-    return nil
+
+
+    return false
 end
-local function eggPosition(obj)
-    if obj:IsA("BasePart") then return obj.Position end
-    if obj:IsA("Model") then
-        local part = obj.PrimaryPart or obj:FindFirstChildWhichIsA("BasePart", true)
-        if part then return part.Position end
+
+
+--========================================================
+-- ROOTS
+--========================================================
+
+local ROOTS={}
+
+
+local function AddRoot(root)
+
+    if not root then
+        return false
     end
-    return nil
-end
-local function playerPosition()
-    local c = player.Character
-    local root = c and c:FindFirstChild("HumanoidRootPart")
-    return root and root.Position
-end
-local function clearMarkers()
-    for _, marker in ipairs(eggHighlights) do
-        pcall(function() marker:Destroy() end)
+
+
+    for _,r in ipairs(ROOTS) do
+
+        if r==root then
+            return false
+        end
     end
-    for i = #eggHighlights, 1, -1 do eggHighlights[i] = nil end
+
+
+    table.insert(ROOTS,root)
+
+    return true
 end
-local function filteredEggs()
-    local found = {}
-    local query = string.lower(preferences.nameQuery or "")
-    local minR = RARITY_INDEX[string.lower(preferences.minRarity or "ทั้งหมด")] or 1
-    local origin = playerPosition()
-    for _, entry in ipairs(scannedEggs) do
-        if entry.object and entry.object.Parent then
-            local nameOK = (query == "") or (string.find(string.lower(entry.name), query, 1, true) ~= nil)
-            local rank = RARITY_INDEX[string.lower(entry.rarity or "")] or 0
-            local rarityOK = minR == 1 or rank >= minR
-            local valueOK = entry.value and entry.value >= (preferences.minValue or 0)
-            if (preferences.minValue or 0) == 0 then valueOK = true end
-            if nameOK and rarityOK and valueOK then
-                local distance = (origin and entry.position) and (entry.position - origin).Magnitude or math.huge
-                table.insert(found, {data = entry, distance = distance})
+
+
+AddRoot(PG)
+AddRoot(CoreGui)
+
+
+if type(gethui)=="function" then
+
+    local ok,hui=pcall(gethui)
+
+    if ok and hui then
+        AddRoot(hui)
+    end
+end
+
+
+--========================================================
+-- FIND TOP UI ROOT
+--========================================================
+
+local function FindTopUIRoot(object)
+
+    if not object then
+        return nil
+    end
+
+
+    local current=object
+    local last=object
+
+
+    while current.Parent do
+
+        local parent=current.Parent
+
+
+        for _,root in ipairs(ROOTS) do
+
+            if parent==root then
+                return current
             end
         end
-    end
-    local mode = preferences.eggMode
-    table.sort(found, function(a, b)
-        if mode == "ตามชื่อ" then return a.data.name < b.data.name end
-        if mode == "มูลค่าสูงสุด" then
-            local va = a.data.value or -1
-            local vb = b.data.value or -1
-            if va ~= vb then return va > vb end
+
+
+        if current:IsA("ScreenGui") then
+            return current
         end
-        return a.distance < b.distance
+
+
+        last=current
+        current=parent
+    end
+
+
+    return last
+end
+
+
+--========================================================
+-- STATE
+--========================================================
+
+local ClaimedRoots=
+    setmetatable(
+        {},
+        {__mode="k"}
+    )
+
+
+local WatchedTexts=
+    setmetatable(
+        {},
+        {__mode="k"}
+    )
+
+
+local Busy=
+    setmetatable(
+        {},
+        {__mode="k"}
+    )
+
+
+local RootConnections=
+    setmetatable(
+        {},
+        {__mode="k"}
+    )
+
+
+--========================================================
+-- CREDIT
+--========================================================
+
+local function AddCredit(root)
+
+    if not root or not root.Parent then
+        return
+    end
+
+
+    local parent=root
+
+
+    if not parent:IsA("GuiObject")
+        and not parent:IsA("LayerCollector")
+    then
+        return
+    end
+
+
+    if parent:FindFirstChild(
+        "ZIGZAG_BF_TRANSLATION_CREDIT"
+    ) then
+        return
+    end
+
+
+    local label=
+        Instance.new("TextLabel")
+
+
+    label.Name=
+        "ZIGZAG_BF_TRANSLATION_CREDIT"
+
+    label.BackgroundTransparency=1
+    label.AnchorPoint=Vector2.new(1,0)
+
+    label.Position=
+        UDim2.new(1,-18,0,10)
+
+    label.Size=
+        UDim2.fromOffset(220,28)
+
+    label.Text=CREDIT_TEXT
+
+    label.TextColor3=
+        CREDIT_COLOR
+
+    label.TextStrokeColor3=
+        Color3.fromRGB(80,0,55)
+
+    label.TextStrokeTransparency=0.05
+    label.TextSize=16
+
+    label.Font=
+        Enum.Font.GothamBold
+
+    label.TextXAlignment=
+        Enum.TextXAlignment.Right
+
+    label.ZIndex=999999
+    label.Active=false
+
+
+    local stroke=
+        Instance.new("UIStroke")
+
+    stroke.Name=
+        "ZIGZAG_CREDIT_STROKE"
+
+    stroke.Color=
+        CREDIT_STROKE
+
+    stroke.Thickness=1.15
+    stroke.Transparency=0.12
+    stroke.Parent=label
+
+
+    local gradient=
+        Instance.new("UIGradient")
+
+    gradient.Name=
+        "ZIGZAG_CREDIT_GRADIENT"
+
+    gradient.Color=
+        ColorSequence.new({
+
+            ColorSequenceKeypoint.new(
+                0,
+                Color3.fromRGB(255,235,250)
+            ),
+
+            ColorSequenceKeypoint.new(
+                0.5,
+                Color3.fromRGB(255,90,210)
+            ),
+
+            ColorSequenceKeypoint.new(
+                1,
+                Color3.fromRGB(255,220,248)
+            )
+
+        })
+
+    gradient.Parent=label
+    label.Parent=parent
+end
+
+
+--========================================================
+-- APPLY TEXT
+--========================================================
+
+local function ApplyText(object)
+
+    if not IsText(object)
+        or Busy[object]
+    then
+        return false
+    end
+
+
+    Busy[object]=true
+
+    local changed=false
+
+
+    pcall(function()
+
+        local old=object.Text
+        local new=Translate(old)
+
+        if old~=new then
+
+            object.Text=new
+            changed=true
+        end
     end)
-    return found
-end
-local function updateMarkers()
-    clearMarkers()
-    if not preferences.eggMarkers then return end
-    local selected = filteredEggs()
-    for i = 1, math.min(#selected, 15) do
-        local obj = selected[i].data.object
-        local ok, highlight = pcall(function()
-            local h = Instance.new("Highlight")
-            h.Name = "ZIGZAG_LOCAL_EGG_MARKER"
-            h.Adornee = obj
-            h.FillColor = COLORS.purple
-            h.OutlineColor = COLORS.purpleLight
-            h.FillTransparency = 0.86
-            h.OutlineTransparency = 0
-            h.DepthMode = Enum.HighlightDepthMode.Occluded
-            h.Parent = workspace -- local-only visual marker; cleanup on UI destruction
-            return h
-        end)
-        if ok and highlight then table.insert(eggHighlights, highlight) end
-    end
-end
-local function scanEggs()
-    -- Read visible workspace objects only; this does not unlock hidden data.
-    -- Users can always scan manually. No remotes, teleport, or prompt firing.
-    for i = #scannedEggs, 1, -1 do scannedEggs[i] = nil end
-    local seen = {}
-    local checked = 0
-    local limit = 14000
-    local objects = workspace:GetDescendants()
-    for _, obj in ipairs(objects) do
-        checked = checked + 1
-        if checked > limit or #scannedEggs >= 90 then break end
-        if (obj:IsA("Model") or obj:IsA("BasePart")) and isEggName(obj.Name) then
-            local target = obj
-            local model = obj:FindFirstAncestorOfClass("Model")
-            if model and isEggName(model.Name) then target = model end
-            local ownerCharacter = target:FindFirstAncestorOfClass("Model")
-            local belongsToCharacter = ownerCharacter and Players:GetPlayerFromCharacter(ownerCharacter)
-            if not seen[target] and not belongsToCharacter then
-                seen[target] = true
-                local rarity = stringValue(target, {"Rarity", "rarity", "Tier", "tier", "EggRarity"})
-                local rawValue = stringValue(target, {"Value", "value", "Price", "price", "Cost", "cost"})
-                local numericValue = rawValue and tonumber(rawValue) or nil
-                table.insert(scannedEggs, {
-                    object = target,
-                    name = target.Name,
-                    rarity = rarity,
-                    value = numericValue,
-                    position = eggPosition(target),
-                })
-            end
-        end
-    end
-    scannedCount = checked
-    eggLastScan = "พบ " .. tostring(#scannedEggs) .. " รายการ จากการตรวจ " .. tostring(checked) .. " วัตถุ"
-    updateMarkers()
-    return #scannedEggs
-end
-local function eggResults()
-    local found = filteredEggs()
-    item("ผลการตรวจล่าสุด", eggLastScan .. " • ตรงตัวกรอง " .. #found .. " รายการ", COLORS.mint)
-    if #found == 0 then
-        item("ยังไม่พบไข่ที่ตรงเงื่อนไข", "ลองกดสแกนใหม่หรือเลือกความหายาก = ทั้งหมด • ชื่อโมเดลในแมพอาจไม่ได้ใช้คำว่า Egg")
-    end
-    for i = 1, math.min(#found, preferences.eggLimit) do
-        local entry = found[i]
-        local egg = entry.data
-        local distance = entry.distance == math.huge and "ไม่ทราบ" or tostring(math.floor(entry.distance)) .. " studs"
-        local details = "ระดับ: " .. (egg.rarity or "ไม่ทราบ") .. "  •  มูลค่า: " .. (egg.value and tostring(egg.value) or "ไม่ทราบ") .. "  •  ระยะ: " .. distance
-        item(i .. ". " .. egg.name, details, COLORS.outline)
-    end
-end
 
-local active = "หน้าแรก"
-local tabButtons = {}
-local wallpaperEnabled = true
-local function clearPage()
-    for _, obj in ipairs(content:GetChildren()) do
-        if obj ~= pad and obj ~= stack then obj:Destroy() end
-    end
-    content.CanvasPosition = Vector2.new(0, 0)
-end
-local function setTab(name)
-    active = name
-    clearPage()
-    for id, button in pairs(tabButtons) do
-        button.BackgroundColor3 = (id == name) and COLORS.purple or COLORS.panel
-        button.TextColor3 = (id == name) and COLORS.background or COLORS.muted
-    end
-    if name == "หน้าแรก" then
-        section("ZIGZAG HUB • MANGA EYE 👁️", "ศูนย์ควบคุมไข่ดีไซน์ ZIGZAG • ธีมม่วงดำ • ภาษาไทย")
-        item("ระบบที่ใช้งานได้ใน V4", "ค้นหาวัตถุไข่ที่ปรากฏใน Workspace • กรองชื่อ/ความหายาก/มูลค่า • ไฮไลต์ตำแหน่งไข่แบบเฉพาะเครื่อง", COLORS.mint)
-        item("เมนูตามระบบเกม", "ขโมยไข่ • วางไข่ • ฟักไข่ • ค้นหาไข่ • ขาย • Dr. Scramble • เซิร์ฟเวอร์ • ผู้เล่น • ตั้งค่า")
-        item("การเชื่อมต่อเกม", "เมนูขโมย/วาง/ฟัก/ขาย/กิจกรรมเป็นการตั้งค่าล่วงหน้า ยังไม่เรียกคำสั่งในเกม; ไม่ใช้สคริปต์อื่น", COLORS.yellow)
-        action("ค้นหาไข่ในแมพ", "ตรวจวัตถุในแมพที่ชื่อมี Egg หรือ ไข่ (ไม่มีการเคลื่อนที่)", "สแกนไข่ตอนนี้", function()
-            local total = scanEggs()
-            setTab("ค้นหาไข่")
-            status("สแกนเสร็จ: " .. total .. " รายการ")
-        end)
-    elseif name == "ค้นหาไข่" then
-        section("EGG FINDER • ค้นหาไข่ในแมพ", "ค้นหาจากโมเดลที่เครื่องมองเห็น • ไม่อ่านข้อมูลลับของเซิร์ฟเวอร์")
-        action("สแกนไข่ที่มองเห็น", "ตรวจ Workspace ใหม่ตามตัวกรองด้านล่าง", "สแกนใหม่", function()
-            local total = scanEggs()
-            setTab("ค้นหาไข่")
-            status("พบวัตถุที่เข้าข่ายไข่ " .. total .. " รายการ")
-        end)
-        dropdownControl("เรียงรายการ", "ใกล้ที่สุด / มูลค่าสูงสุด / ตามชื่อ", "eggMode", {"ใกล้ที่สุด", "มูลค่าสูงสุด", "ตามชื่อ"}, function() updateMarkers() end)
-        dropdownControl("ความหายากขั้นต่ำ", "ไม่ทราบระดับจะไม่ถูกแสดงเมื่อกรองระดับ", "minRarity", RARITIES, function() updateMarkers() end)
-        inputControl("ชื่อไข่ที่ต้องการ", "เว้นว่างเพื่อดูทั้งหมด กดเสร็จบนคีย์บอร์ดเพื่อบันทึก", "nameQuery", "เช่น Golden")
-        inputControl("มูลค่าขั้นต่ำ", "ใส่ตัวเลขเต็ม เช่น 1000000 (0 = ไม่กรอง)", "minValue", "0")
-        sliderControl("จำนวนผลลัพธ์สูงสุด", "รายการต่อหน้า 1–30", "eggLimit", 1, 30)
-        toggleControl("เน้นตำแหน่งไข่", "แสดง Highlight เฉพาะในเครื่อง (สูงสุด 15 ชิ้น)", "eggMarkers", function() updateMarkers() end)
-        action("นำตัวกรองไปใช้", "แสดงผลการค้นหาตามตัวเลือกที่เพิ่งบันทึก", "แสดงผล", function()
-            updateMarkers()
-            setTab("ค้นหาไข่")
-            status("ปรับผลการค้นหาแล้ว")
-        end)
-        eggResults()
-    elseif name == "ขโมยไข่" then
-        section("AUTO STEAL • ตั้งค่าการขโมยไข่", "โครงเมนูตามรูปแบบแมพเก็บไข่ • ไม่มีการสั่งเคลื่อนที่หรือโอนย้ายไข่")
-        configToggle("ขโมยไข่อัตโนมัติ", "เลือกเปิดเก็บสถานะเตรียมผูกกับระบบเกม", "autoSteal")
-        configToggle("ขโมยทันที", "ตั้งค่าโหมดขโมยทันที", "instantSteal")
-        configDropdown("วิธีเข้าหาไข่", "เดินปกติเท่านั้นในขั้นพัฒนา", "stealMode", {"เดินปกติ", "รอเลือกเป้าหมาย", "เฉพาะไข่ที่กำหนด"})
-        configDropdown("ลำดับความสำคัญ", "กำหนดรูปแบบคัดเลือกเป้าหมาย", "stealPriority", {"มูลค่า", "ความหายาก", "ใกล้ที่สุด"})
-        item("ใช้ตัวกรองร่วมกับค้นหาไข่", "ชื่อไข่ ความแรร์ มูลค่าขั้นต่ำ ตั้งได้ที่เมนู ค้นหาไข่")
-        configNote()
-    elseif name == "วางไข่" then
-        section("AUTO PLACE • ตั้งค่าการวางไข่", "เตรียมขั้นตอนวางไข่สำหรับระบบ ZIGZAG ของเรา")
-        configToggle("วางไข่อัตโนมัติ", "ตั้งค่าวางไข่ที่ถือหรือที่เลือก", "autoPlace")
-        configDropdown("เงื่อนไขการวางไข่", "เลือกว่าจะเริ่มวางเมื่อไร", "placeRule", {"เมื่อกลับฐาน", "หลังได้ไข่", "เฉพาะเมื่อสั่ง"})
-        configDropdown("ลำดับการวางไข่", "เลือกลำดับเป้าหมาย", "placePriority", {"มูลค่า", "ความหายาก", "ตามชื่อ"})
-        configNote()
-    elseif name == "ฟักไข่" then
-        section("AUTO HATCH • ตั้งค่าฟักไข่", "เตรียมกรองไข่ที่จะฟักและสัตว์เลี้ยงที่จะสวมใส่")
-        configToggle("ฟักไข่อัตโนมัติ", "กำหนดระบบฟักไข่ไว้ก่อน", "autoHatch")
-        configDropdown("ความหายากขั้นต่ำที่จะฟัก", "ระดับไข่ที่อนุญาต", "hatchMin", RARITIES)
-        configToggle("ใส่สัตว์เลี้ยงดีที่สุด", "ตั้งค่าการสวมใส่", "autoEquip")
-        configNote()
-    elseif name == "ขาย / คลัง" then
-        section("INVENTORY • ขายและคัดกรอง", "รวมเงื่อนไขการขายไข่และสัตว์เลี้ยง")
-        configToggle("ขายอัตโนมัติ", "ตั้งค่าการขายไอเทมที่ผ่านตัวกรอง", "autoSell")
-        configToggle("เก็บตัวกลายพันธุ์ไว้", "ไม่เลือกตัว Mutation เป็นเป้าหมายขาย", "keepMutated")
-        item("ระบบคลังของ", "ยังไม่มีตัวอ่าน Inventory เฉพาะแมพนี้ จึงยังไม่แสดงของหรือสั่งขาย")
-        configNote()
-    elseif name == "Dr. Scramble" then
-        section("DR. SCRAMBLE • โซนกิจกรรม", "แยกเมนูสำหรับห้องแล็บและกิจกรรมในแมพ")
-        configToggle("แล็บอัตโนมัติ", "ตัวเลือกเตรียมการแลกของและรับรางวัล", "labAuto")
-        item("รายการพัฒนาต่อ", "แลกของในแล็บ • รับรางวัล • ฟาร์มโดรน • บอสหุ่นรบ • ไข่รางวัล")
-        configNote()
-    elseif name == "เซิร์ฟเวอร์" then
-        section("SERVER • ข้อมูลเซิร์ฟเวอร์", "ข้อมูลจริงจากเกม • ไม่มีการย้ายห้องอัตโนมัติ")
-        item("Place ID", tostring(game.PlaceId))
-        item("Job ID", tostring(game.JobId))
-        item("ผู้เล่นในเซิร์ฟเวอร์", tostring(#Players:GetPlayers()) .. " คน")
-        configDropdown("โหมดเลือกเซิร์ฟเวอร์", "ตั้งค่าล่วงหน้า", "hopMode", {"คนในห้องน้อย", "คนในห้องเยอะ", "สุ่ม"})
-        configToggle("ย้ายเซิร์ฟเวอร์อัตโนมัติ", "ยังไม่เชื่อมกับ TeleportService", "autoHop")
-        action("รีเฟรชข้อมูล", "อัปเดตผู้เล่นและเซิร์ฟเวอร์ปัจจุบัน", "รีเฟรช", function()
-            setTab("เซิร์ฟเวอร์")
-            status("อัปเดตข้อมูลแล้ว")
-        end)
-    elseif name == "ผู้เล่น" then
-        section("PLAYER • สถานะตัวละคร", "อ่านข้อมูลเท่านั้น ไม่แก้ความเร็วและไม่วาร์ป")
-        item("ผู้เล่น", player.DisplayName .. "  (@" .. player.Name .. ")", COLORS.purple)
-        item("User ID", tostring(player.UserId))
-        local humanoid = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
-        item("สถานะ HP", humanoid and (math.floor(humanoid.Health) .. " / " .. math.floor(humanoid.MaxHealth)) or "กำลังโหลด")
-        item("ตำแหน่งตัวละคร", (function()
-            local v = playerPosition()
-            return v and string.format("X %.0f / Y %.0f / Z %.0f", v.X, v.Y, v.Z) or "ยังไม่มีตำแหน่ง"
-        end)())
-        action("อัปเดตข้อมูล", "อ่านข้อมูลใหม่จากเกม", "รีเฟรช", function() setTab("ผู้เล่น") end)
-    elseif name == "ตั้งค่า" then
-        section("SETTINGS • ปรับแต่ง ZIGZAG", "ตั้งค่าเฉพาะเมนูของเรา ไม่แก้สคริปต์ของเกม")
-        action("ภาพพื้นหลัง MANGA EYE", "เปิดหรือปิดรูปมังงะในหน้าต่าง", wallpaperEnabled and "ซ่อนภาพ" or "แสดงภาพ", function()
-            wallpaperEnabled = not wallpaperEnabled
-            wallpaper.Visible = wallpaperEnabled
-            setTab("ตั้งค่า")
-        end)
-        action("หยุดไฮไลต์ทั้งหมด", "ลบไฮไลต์ที่ ZIGZAG สร้างไว้", "ล้างไฮไลต์", function()
-            preferences.eggMarkers = false
-            clearMarkers()
-            setTab("ตั้งค่า")
-            status("ล้างไฮไลต์แล้ว")
-        end)
-        action("รีเซ็ตตำแหน่งหน้าต่าง", "ย้ายหน้าต่างกลับกลางจอ", "จัดกลางจอ", function()
-            panel.Position = UDim2.fromScale(0.5, 0.5)
-            status("ย้ายหน้าต่างกลับกลางจอแล้ว")
-        end)
-        action("ย่อหน้าต่าง", "เก็บหน้าต่าง เหลือไอคอนดวงตา", "ย่อ", function() panel.Visible = false end)
-        item("เวอร์ชัน", "ZIGZAG HUB • MANGA EYE • V4 • EGG COMMAND")
-        item("หมายเหตุ", "การค้นหาอ่านได้เฉพาะวัตถุที่อยู่ใน Workspace ของเครื่อง และขึ้นอยู่กับโครงสร้างชื่อวัตถุของเกม")
-    end
-end
 
-local TABS = {"หน้าแรก", "ค้นหาไข่", "ขโมยไข่", "วางไข่", "ฟักไข่", "ขาย / คลัง", "Dr. Scramble", "เซิร์ฟเวอร์", "ผู้เล่น", "ตั้งค่า"}
-for index, name in ipairs(TABS) do
-    local button = make("TextButton", sidebar, {
-        Size = UDim2.new(1, -5, 0, 40), LayoutOrder = index,
-        BackgroundColor3 = COLORS.panel, Text = name,
-        TextColor3 = COLORS.muted, TextXAlignment = Enum.TextXAlignment.Left,
-        Font = BOLD, TextSize = 12, BorderSizePixel = 0,
-        AutoButtonColor = true, ZIndex = 23,
-    })
-    corner(button, 10)
-    outline(button, COLORS.outline, 1, 0.67)
-    make("UIPadding", button, { PaddingLeft = UDim.new(0, 12) })
-    tabButtons[name] = button
-    button.Activated:Connect(function() setTab(name) end)
-end
-setTab("หน้าแรก")
+    if object:IsA("TextBox") then
 
--- Pointer-specific dragging: moving one finger must not move another widget.
-local function draggable(target, handle, onTap)
-    local pressedInput = nil
-    local startPointer = nil
-    local startUDim = nil
-    local hasMoved = false
-    handle.InputBegan:Connect(function(input)
-        if input.UserInputType ~= Enum.UserInputType.Touch and
-           input.UserInputType ~= Enum.UserInputType.MouseButton1 then return end
-        pressedInput = input
-        startPointer = Vector2.new(input.Position.X, input.Position.Y)
-        startUDim = target.Position
-        hasMoved = false
-        input.Changed:Connect(function()
-            if input.UserInputState == Enum.UserInputState.End and pressedInput == input then
-                pressedInput = nil
-                if not hasMoved and onTap then onTap() end
+        pcall(function()
+
+            local old=
+                object.PlaceholderText
+
+            local new=
+                Translate(old)
+
+            if old~=new then
+
+                object.PlaceholderText=new
+                changed=true
             end
         end)
-    end)
-    UIS.InputChanged:Connect(function(input)
-        if not pressedInput or not startPointer or not startUDim then return end
-        if pressedInput.UserInputType == Enum.UserInputType.Touch then
-            if input ~= pressedInput then return end
-        elseif input.UserInputType ~= Enum.UserInputType.MouseMovement then
+    end
+
+
+    Busy[object]=nil
+
+    return changed
+end
+
+
+--========================================================
+-- WATCH DYNAMIC TEXT
+--========================================================
+
+local function WatchText(object)
+
+    if not IsText(object)
+        or WatchedTexts[object]
+    then
+        return
+    end
+
+
+    WatchedTexts[object]=true
+
+
+    object:GetPropertyChangedSignal(
+        "Text"
+    ):Connect(function()
+
+        if Busy[object] then
             return
         end
-        local delta = Vector2.new(input.Position.X, input.Position.Y) - startPointer
-        if delta.Magnitude < 10 and not hasMoved then return end
-        hasMoved = true
-        local camera = workspace.CurrentCamera
-        local viewport = camera and camera.ViewportSize or Vector2.new(1000, 650)
-        local size = target.AbsoluteSize
-        local origin = Vector2.new(
-            startUDim.X.Scale * viewport.X + startUDim.X.Offset,
-            startUDim.Y.Scale * viewport.Y + startUDim.Y.Offset
-        )
-        -- Panel uses a 0.5/0.5 anchor, icon uses a 0/0.5 anchor.
-        local anchor = target.AnchorPoint
-        local topLeft = origin + delta - Vector2.new(size.X * anchor.X, size.Y * anchor.Y)
-        local clamped = Vector2.new(
-            math.clamp(topLeft.X, 0, math.max(0, viewport.X - size.X)),
-            math.clamp(topLeft.Y, 0, math.max(0, viewport.Y - size.Y))
-        )
-        local newAnchor = clamped + Vector2.new(size.X * anchor.X, size.Y * anchor.Y)
-        target.Position = UDim2.fromOffset(newAnchor.X, newAnchor.Y)
-        if target == icon then
-            badge.Position = UDim2.fromOffset(clamped.X + 3, clamped.Y + 67)
+
+
+        task.defer(function()
+
+            if object
+                and object.Parent
+            then
+                ApplyText(object)
+            end
+        end)
+    end)
+
+
+    if object:IsA("TextBox") then
+
+        object:GetPropertyChangedSignal(
+            "PlaceholderText"
+        ):Connect(function()
+
+            if Busy[object] then
+                return
+            end
+
+
+            task.defer(function()
+
+                if object
+                    and object.Parent
+                then
+                    ApplyText(object)
+                end
+            end)
+        end)
+    end
+end
+
+
+--========================================================
+-- APPLY BF ROOT
+--========================================================
+
+local function ApplyBFRoot(root)
+
+    if not root
+        or not root.Parent
+    then
+        return
+    end
+
+
+    if ClaimedRoots[root] then
+        return
+    end
+
+
+    ClaimedRoots[root]=true
+
+
+    if IsText(root) then
+
+        ApplyText(root)
+        WatchText(root)
+    end
+
+
+    for _,object in ipairs(
+        root:GetDescendants()
+    ) do
+
+        if IsText(object) then
+
+            ApplyText(object)
+            WatchText(object)
+        end
+    end
+
+
+    AddCredit(root)
+
+
+    local descendantConnection=
+        root.DescendantAdded
+        :Connect(function(object)
+
+            if not IsText(object) then
+                return
+            end
+
+
+            task.defer(function()
+
+                if object
+                    and object.Parent
+                then
+
+                    ApplyText(object)
+                    WatchText(object)
+                end
+            end)
+        end)
+
+
+    local ancestryConnection
+
+
+    ancestryConnection=
+        root.AncestryChanged
+        :Connect(function()
+
+            if not root.Parent then
+
+                pcall(function()
+                    descendantConnection:Disconnect()
+                end)
+
+
+                pcall(function()
+                    ancestryConnection:Disconnect()
+                end)
+
+
+                ClaimedRoots[root]=nil
+                RootConnections[root]=nil
+            end
+        end)
+
+
+    RootConnections[root]={
+        descendantConnection,
+        ancestryConnection
+    }
+
+
+    print(
+        "✅ BF UI detected | Thai translation active"
+    )
+end
+
+
+--========================================================
+-- SCORE ROOT
+--========================================================
+
+local function ScoreRoot(root)
+
+    if not root
+        or not root.Parent
+    then
+        return 0
+    end
+
+
+    local score=0
+    local checked=0
+
+
+    local function CheckObject(o)
+
+        if checked>=150 then
+            return
+        end
+
+
+        if not IsText(o) then
+            return
+        end
+
+
+        checked+=1
+
+
+        local text=
+            Clean(
+                GetRawText(o)
+            )
+
+
+        if text=="" then
+            return
+        end
+
+
+        if IsBFSignature(text) then
+
+            score+=5
+            return
+        end
+
+
+        if LOWER[
+            string.lower(text)
+        ] then
+
+            score+=1
+        end
+    end
+
+
+    CheckObject(root)
+
+
+    for _,o in ipairs(
+        root:GetDescendants()
+    ) do
+
+        CheckObject(o)
+
+
+        if checked>=150
+            or score>=5
+        then
+            break
+        end
+    end
+
+
+    return score
+end
+
+
+--========================================================
+-- NEW OBJECT HANDLER
+--========================================================
+
+local function CheckNewText(object)
+
+    if not IsText(object) then
+        return
+    end
+
+
+    local text=
+        GetRawText(object)
+
+
+    if IsBFSignature(text) then
+
+        local root=
+            FindTopUIRoot(object)
+
+
+        if root then
+            ApplyBFRoot(root)
+        end
+
+
+        return
+    end
+
+
+    for root,_ in pairs(
+        ClaimedRoots
+    ) do
+
+        if object==root
+            or object:IsDescendantOf(root)
+        then
+
+            ApplyText(object)
+            WatchText(object)
+
+            return
+        end
+    end
+end
+
+
+--========================================================
+-- WATCH ROOTS
+--========================================================
+
+local WatchedRoots=
+    setmetatable(
+        {},
+        {__mode="k"}
+    )
+
+
+local NewCandidates=
+    setmetatable(
+        {},
+        {__mode="k"}
+    )
+
+
+local function WatchRoot(root)
+
+    if not root
+        or WatchedRoots[root]
+    then
+        return
+    end
+
+
+    WatchedRoots[root]=true
+
+
+    root.ChildAdded
+    :Connect(function(child)
+
+        NewCandidates[child]=true
+    end)
+
+
+    root.DescendantAdded
+    :Connect(function(object)
+
+        if IsText(object) then
+
+            task.defer(function()
+
+                if object
+                    and object.Parent
+                then
+
+                    CheckNewText(object)
+                end
+            end)
         end
     end)
 end
 
-draggable(icon, icon, function() panel.Visible = not panel.Visible end)
-draggable(panel, header, nil)
-minimize.Activated:Connect(function() panel.Visible = false end)
-UIS.InputBegan:Connect(function(input, used)
-    if not used and input.KeyCode == Enum.KeyCode.RightControl then
-        panel.Visible = not panel.Visible
+
+for _,root in ipairs(ROOTS) do
+    WatchRoot(root)
+end
+
+
+--========================================================
+-- FALLBACK
+--========================================================
+
+local function CheckCandidates()
+
+    for root,_ in pairs(
+        NewCandidates
+    ) do
+
+        if root
+            and root.Parent
+            and not ClaimedRoots[root]
+        then
+
+            local score=
+                ScoreRoot(root)
+
+
+            if score>=3 then
+                ApplyBFRoot(root)
+            end
+        end
+    end
+end
+
+
+--========================================================
+-- REFRESH GETHUI
+--========================================================
+
+local function RefreshHUI()
+
+    if type(gethui)~="function" then
+        return
+    end
+
+
+    local ok,hui=
+        pcall(gethui)
+
+
+    if ok and hui then
+
+        if AddRoot(hui) then
+            WatchRoot(hui)
+        end
+    end
+end
+
+
+--========================================================
+-- TRANSLATOR STARTS FIRST
+--========================================================
+
+print(
+    "✅ ZIGZAG BF Translator V2.4 armed"
+)
+
+
+--========================================================
+-- LOAD BF
+--========================================================
+
+task.spawn(function()
+
+    local ok,source=
+        pcall(function()
+
+            return game:HttpGet(
+                BF_URL
+            )
+        end)
+
+
+    if not ok then
+
+        warn(
+            "[BF ZIGZAG] โหลด BFLoader ไม่สำเร็จ:",
+            source
+        )
+
+        return
+    end
+
+
+    local func,err=
+        loadstring(source)
+
+
+    if not func then
+
+        warn(
+            "[BF ZIGZAG] Load Error:",
+            err
+        )
+
+        return
+    end
+
+
+    local success,runError=
+        pcall(func)
+
+
+    if not success then
+
+        warn(
+            "[BF ZIGZAG] Runtime Error:",
+            runError
+        )
     end
 end)
 
-local function rescale()
-    local camera = workspace.CurrentCamera
-    if not camera then return end
-    local v = camera.ViewportSize
-    scaler.Scale = math.min(1, math.max(0.47, math.min((v.X - 20)/620, (v.Y - 48)/400)))
-end
-rescale()
-local camera = workspace.CurrentCamera
-if camera then camera:GetPropertyChangedSignal("ViewportSize"):Connect(rescale) end
 
-gui.Destroying:Connect(function()
-    clearMarkers()
+--========================================================
+-- STARTUP FALLBACK
+--========================================================
+
+task.spawn(function()
+
+    task.wait(0.5)
+    RefreshHUI()
+    CheckCandidates()
+
+    task.wait(1)
+    RefreshHUI()
+    CheckCandidates()
+
+    task.wait(2)
+    RefreshHUI()
+    CheckCandidates()
+
+    task.wait(3)
+    RefreshHUI()
+    CheckCandidates()
+
+    task.wait(4)
+    CheckCandidates()
+
 end)
-print("[ZIGZAG HUB V4] Egg menus, workspace egg finder and configuration loaded. No external gameplay code executed.")
+
+
+--========================================================
+-- NOTIFICATION
+--========================================================
+
+task.delay(
+    2,
+    function()
+
+        pcall(function()
+
+            StarterGui:SetCore(
+                "SendNotification",
+                {
+                    Title="🥭 BigFroot ภาษาไทย",
+                    Text="แปลไทยโดย ZIGZAG | V2.4",
+                    Duration=5
+                }
+            )
+        end)
+    end
+)
+
+
+print("========================================")
+print("✅ BIGFROOT THAI - ZIGZAG V2.4 MERGED")
+print("✅ WORKING V2 ENGINE")
+print("✅ BFLoader INCLUDED")
+print("✅ V2.3 BASE PRESERVED")
+print("✅ BF V1.7.9 ENCHANTED UPDATE")
+print("✅ WISP / BUTTERFLIES / ESSENCE")
+print("✅ TRADE UP / BANJO CRICKET")
+print("✅ AREA / DROPDOWN")
+print("✅ SETTINGS / CONFIG / THEME")
+print("✅ WEATHER / PATTERN")
+print("✅ WEBHOOK / DASHBOARD")
+print("✅ FUSE / SHRINE")
+print("✅ DR SCRAMBLE")
+print("✅ MULTI-LINE + RICHTEXT")
+print("✅ DYNAMIC TEXT")
+print("✅ ZIGZAG CREDIT")
+print("========================================")
