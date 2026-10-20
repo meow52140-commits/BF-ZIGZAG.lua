@@ -1,7 +1,7 @@
 --========================================================
--- BIGFROOT THAI - ZIGZAG V2.6 HALLOWEEN FULL MERGED
+-- BIGFROOT THAI - ZIGZAG V2.6.1 TASK PRIORITY FULL MERGED
 -- BASE: USER-PROVIDED WORKING V2.5.2 FIXED (V2.5.1)
--- BF v1.8.2 RACE + BF v1.8.6 HALLOWEEN translation additions
+-- BF v1.8.2 RACE + BF v1.8.6 HALLOWEEN + BF v1.8.7 TASK PRIORITY
 -- Translator engine, source URL, theme and old mappings preserved
 -- No RenderStepped / no permanent full-scan loop
 --========================================================
@@ -996,6 +996,35 @@ local T={
 ["Dimension OPEN | Train OPEN | Ghouler - | Pumpkin Boss closed"]="มิติเปิด | รถไฟเปิด | Ghouler - | บอสฟักทองปิด",
 ["Candy Corn 200 | Souls 0 | Tickets 0"]="ข้าวโพดลูกกวาด 200 | วิญญาณ 0 | ตั๋ว 0",
 
+
+--========================================================
+-- BF V1.8.7 - TASK PRIORITY / SPIRIT PRIORITY (ADDED ONLY)
+-- Captions and dropdown choices from ZIGZAG screenshots.
+--========================================================
+["Task Priority"]="ลำดับความสำคัญของงาน",
+["Task"]="งาน",
+["Move Up"]="เลื่อนขึ้น",
+["Move Down"]="เลื่อนลง",
+["To Top"]="ย้ายขึ้นบนสุด",
+["Order (top first)"]="ลำดับงาน (บนสุดก่อน)",
+["Capture The Egg"]="จับไข่",
+["Steal Filter Eggs"]="ขโมยไข่ตามตัวกรอง",
+["Steal Recipe Eggs"]="ขโมยไข่สำหรับสูตร",
+["Shooting Star"]="ดาวตก",
+["Butterfly Bloom"]="ผีเสื้อผลิบาน",
+["Halloween Eggs"]="ไข่ฮาโลวีน",
+["Pumpkin Moon"]="พระจันทร์ฟักทอง",
+["Halloween Farming"]="ฟาร์มฮาโลวีน",
+["Spirit Priority"]="ลำดับความสำคัญของวิญญาณ",
+["Vengeful"]="วิญญาณพยาบาท",
+["Haunted"]="วิญญาณสิงสู่",
+["Lost"]="วิญญาณหลงทาง",
+["Monsters For"]="เวลาต่อมอนสเตอร์",
+["Fish For"]="เวลาตกปลา",
+["Auto Ride Train"]="ออโต้ขึ้นรถไฟ",
+["Steal Wisp Eggs"]="ขโมยไข่เควสต์ Wisp",
+["Quest"]="เควสต์",
+
 }
 
 --========================================================
@@ -1569,6 +1598,12 @@ local function TranslateLine(line)
     -- DYNAMIC
     --====================================================
 
+    -- BF v1.8.7: task-priority counter (e.g. 13 / 13 rows)
+    local rowNow,rowTotal=plain:match("^(%d+)%s*/%s*(%d+)%s+rows$")
+    if rowNow then
+        return lead..rowNow.." / "..rowTotal.." รายการ"..tail
+    end
+
     local n=
         plain:match("^(%d+)%s+selected$")
 
@@ -1944,6 +1979,29 @@ local function TranslateLine(line)
         {"Golden","ทอง"},
         {"Silver","เงิน"},
 
+
+        -- BF v1.8.7 TASK PRIORITY (decorated labels / breadcrumbs / lists)
+        {"Task Priority","ลำดับความสำคัญของงาน"},
+        {"Spirit Priority","ลำดับความสำคัญของวิญญาณ"},
+        {"Capture The Egg","จับไข่"},
+        {"Steal Filter Eggs","ขโมยไข่ตามตัวกรอง"},
+        {"Steal Recipe Eggs","ขโมยไข่สำหรับสูตร"},
+        {"Order %(top first%)","ลำดับงาน (บนสุดก่อน)"},
+        {"Move Up","เลื่อนขึ้น"},
+        {"Move Down","เลื่อนลง"},
+        {"To Top","ย้ายขึ้นบนสุด"},
+        {"Shooting Stars","ดาวตก"},
+        {"Shooting Star","ดาวตก"},
+        {"Butterfly Bloom","ผีเสื้อผลิบาน"},
+        {"Halloween Farming","ฟาร์มฮาโลวีน"},
+        {"Halloween Eggs","ไข่ฮาโลวีน"},
+        {"Pumpkin Moon","พระจันทร์ฟักทอง"},
+        {"Vengeful","วิญญาณพยาบาท"},
+        {"Haunted","วิญญาณสิงสู่"},
+        {"Lost","วิญญาณหลงทาง"},
+        {"Monsters For","เวลาต่อมอนสเตอร์"},
+        {"Fish For","เวลาตกปลา"},
+
         -- BF v1.8.6 HALLOWEEN (decorated/extended menu text)
         {"Auto Halloween Eggs","ออโต้เก็บไข่ฮาโลวีน"},
         {"Auto Kill Monsters","ออโต้กำจัดมอนสเตอร์"},
@@ -2056,7 +2114,9 @@ local SIGNATURES={
 "auto ride the train",
 "auto pumpkin boss",
 "auto ghost dog quest",
-"auto buy halloween egg",
+ "auto buy halloween egg",
+ "task priority",
+ "spirit priority",
 }
 
 local function IsBFSignature(text)
@@ -2688,7 +2748,7 @@ end
 --========================================================
 
 print(
-    "✅ ZIGZAG BF Translator V2.6 HALLOWEEN UPDATE armed"
+    "✅ ZIGZAG BF Translator V2.6.1 TASK PRIORITY armed"
 )
 
 --========================================================
@@ -2776,7 +2836,7 @@ task.delay(
                 "SendNotification",
                 {
                     Title="🥭 BigFroot ภาษาไทย",
-                    Text="ZIGZAG V2.6 | Halloween + Race",
+                    Text="ZIGZAG V2.6.1 | BF v1.8.7 Task Priority",
                     Duration=5
                 }
             )
@@ -2789,13 +2849,14 @@ task.delay(
 --========================================================
 
 print("========================================")
-print("✅ BIGFROOT THAI - ZIGZAG V2.6 HALLOWEEN FULL MERGED")
+print("✅ BIGFROOT THAI - ZIGZAG V2.6.1 TASK PRIORITY FULL MERGED")
 print("✅ WORKING V2.5.2 BASE PRESERVED")
 print("✅ V2.4 TRANSLATOR ENGINE PRESERVED")
 print("✅ BFLoader INCLUDED")
 print("✅ BF V1.7.9 ENCHANTED UPDATE")
 print("✅ BF V1.8.2 RACE TRANSLATIONS")
 print("✅ BF V1.8.6 HALLOWEEN TRANSLATIONS")
+print("✅ BF V1.8.7 TASK PRIORITY / SPIRITS TRANSLATIONS")
 print("✅ PHANTOM EXPRESS / PUMPKIN BOSS / GHOST DOG / CANDY SHOP")
 print("✅ HALLOWEEN DYNAMIC STATUS / CURRENCY")
 print("✅ RACE RALLY / RACE REWARDS / SHOOTING STARS")
