@@ -1,7 +1,7 @@
 --========================================================
--- BIGFROOT THAI - ZIGZAG V2.6.1 TASK PRIORITY FULL MERGED
+-- BIGFROOT THAI - ZIGZAG V2.6.2 UFO BAT FULL MERGED
 -- BASE: USER-PROVIDED WORKING V2.5.2 FIXED (V2.5.1)
--- BF v1.8.2 RACE + BF v1.8.6 HALLOWEEN + BF v1.8.7 TASK PRIORITY
+-- BF v1.8.2 RACE + BF v1.8.6 HALLOWEEN + BF v1.8.7 TASK PRIORITY + BF v2.0.1 UFO/BAT
 -- Translator engine, source URL, theme and old mappings preserved
 -- No RenderStepped / no permanent full-scan loop
 --========================================================
@@ -1025,6 +1025,35 @@ local T={
 ["Steal Wisp Eggs"]="ขโมยไข่เควสต์ Wisp",
 ["Quest"]="เควสต์",
 
+
+--========================================================
+-- BF v2.0.1 - UFO / BAT / STEAL MODE UPDATE (ADDED ONLY)
+-- Screenshots: UFO page, Bat page, auto-steal modes and Tween speed.
+-- Keep original BF controls and all existing mappings untouched.
+--========================================================
+["UFO Sightings"]="กิจกรรมพบเห็น UFO",
+["Auto UFO Sightings"]="ออโต้กิจกรรม UFO",
+["Rare UFO Vault + Capsules"]="ห้องนิรภัย UFO หายาก + แคปซูล",
+["Rare UFO Vault"]="ห้องนิรภัย UFO หายาก",
+["UFO Capsules"]="แคปซูล UFO",
+["Auto Trade In (Alien ชาร์ด)"]="ออโต้แลก (ชาร์ดเอเลี่ยน)",
+["Auto Trade In (Alien Shards)"]="ออโต้แลก (ชาร์ดเอเลี่ยน)",
+["Auto Trade-In (Alien Shards)"]="ออโต้แลก (ชาร์ดเอเลี่ยน)",
+["Alien Shards"]="ชาร์ดเอเลี่ยน",
+["Alien Shard"]="ชาร์ดเอเลี่ยน",
+["Waiting for tonight's UFO."]="กำลังรอ UFO ของคืนนี้",
+["Waiting for tonight’s UFO."]="กำลังรอ UFO ของคืนนี้",
+["Waiting for tonight's UFO"]="กำลังรอ UFO ของคืนนี้",
+["UFO event"]="กิจกรรม UFO",
+["UFO Event"]="กิจกรรม UFO",
+["Bat"]="ไม้ตี",
+["Steal From Other Players"]="ขโมยจากผู้เล่นอื่น",
+["Steal from other players"]="ขโมยจากผู้เล่นอื่น",
+["Tween Speed"]="ความเร็ว Tween",
+["Tween speed"]="ความเร็ว Tween",
+["Instant Steal Speed"]="ความเร็วขโมยทันที",
+["Auto Steal Settings"]="ตั้งค่าการขโมยอัตโนมัติ",
+
 }
 
 --========================================================
@@ -1980,6 +2009,23 @@ local function TranslateLine(line)
         {"Silver","เงิน"},
 
 
+
+        -- BF v2.0.1: UFO, Bat and auto-steal (decorated or mixed labels)
+        {"Auto UFO Sightings","ออโต้กิจกรรม UFO"},
+        {"UFO Sightings","กิจกรรมพบเห็น UFO"},
+        {"Rare UFO Vault %+ Capsules","ห้องนิรภัย UFO หายาก + แคปซูล"},
+        {"Rare UFO Vault","ห้องนิรภัย UFO หายาก"},
+        {"UFO Capsules","แคปซูล UFO"},
+        {"Auto Trade In %(Alien ชาร์ด%)","ออโต้แลก (ชาร์ดเอเลี่ยน)"},
+        {"Auto Trade In %(Alien Shards%)","ออโต้แลก (ชาร์ดเอเลี่ยน)"},
+        {"Auto Trade%-In %(Alien Shards%)","ออโต้แลก (ชาร์ดเอเลี่ยน)"},
+        {"Waiting for tonight's UFO%.","กำลังรอ UFO ของคืนนี้"},
+        {"Waiting for tonight’s UFO%.","กำลังรอ UFO ของคืนนี้"},
+        {"Steal From Other Players","ขโมยจากผู้เล่นอื่น"},
+        {"Steal from other players","ขโมยจากผู้เล่นอื่น"},
+        {"Tween Speed","ความเร็ว Tween"},
+        {"Tween speed","ความเร็ว Tween"},
+
         -- BF v1.8.7 TASK PRIORITY (decorated labels / breadcrumbs / lists)
         {"Task Priority","ลำดับความสำคัญของงาน"},
         {"Spirit Priority","ลำดับความสำคัญของวิญญาณ"},
@@ -2117,6 +2163,10 @@ local SIGNATURES={
  "auto buy halloween egg",
  "task priority",
  "spirit priority",
+ "auto ufo sightings",
+ "rare ufo vault",
+ "steal from other players",
+ "tween speed",
 }
 
 local function IsBFSignature(text)
@@ -2748,7 +2798,7 @@ end
 --========================================================
 
 print(
-    "✅ ZIGZAG BF Translator V2.6.1 TASK PRIORITY armed"
+    "✅ ZIGZAG BF Translator V2.6.2 UFO BAT armed"
 )
 
 --========================================================
@@ -2836,7 +2886,7 @@ task.delay(
                 "SendNotification",
                 {
                     Title="🥭 BigFroot ภาษาไทย",
-                    Text="ZIGZAG V2.6.1 | BF v1.8.7 Task Priority",
+                    Text="ZIGZAG V2.6.2 | BF v2.0.1 UFO + Bat",
                     Duration=5
                 }
             )
@@ -2849,7 +2899,7 @@ task.delay(
 --========================================================
 
 print("========================================")
-print("✅ BIGFROOT THAI - ZIGZAG V2.6.1 TASK PRIORITY FULL MERGED")
+print("✅ BIGFROOT THAI - ZIGZAG V2.6.2 UFO BAT FULL MERGED")
 print("✅ WORKING V2.5.2 BASE PRESERVED")
 print("✅ V2.4 TRANSLATOR ENGINE PRESERVED")
 print("✅ BFLoader INCLUDED")
@@ -2857,6 +2907,7 @@ print("✅ BF V1.7.9 ENCHANTED UPDATE")
 print("✅ BF V1.8.2 RACE TRANSLATIONS")
 print("✅ BF V1.8.6 HALLOWEEN TRANSLATIONS")
 print("✅ BF V1.8.7 TASK PRIORITY / SPIRITS TRANSLATIONS")
+print("✅ BF v2.0.1 UFO / BAT / TWEEN / STEAL TRANSLATIONS")
 print("✅ PHANTOM EXPRESS / PUMPKIN BOSS / GHOST DOG / CANDY SHOP")
 print("✅ HALLOWEEN DYNAMIC STATUS / CURRENCY")
 print("✅ RACE RALLY / RACE REWARDS / SHOOTING STARS")
