@@ -1,7 +1,7 @@
 --========================================================
--- BIGFROOT THAI - ZIGZAG V2.6.2 UFO BAT FULL MERGED
+-- BIGFROOT THAI - ZIGZAG V2.6.5 TWO MAP + DROPDOWN THAI FULL MERGED
 -- BASE: USER-PROVIDED WORKING V2.5.2 FIXED (V2.5.1)
--- BF v1.8.2 RACE + BF v1.8.6 HALLOWEEN + BF v1.8.7 TASK PRIORITY + BF v2.0.1 UFO/BAT
+-- BF v1.8.2 RACE + BF v1.8.6 HALLOWEEN + BF v1.8.7 TASK PRIORITY + BF v2.0.1 UFO/BAT + Break and Steal an Egg
 -- Translator engine, source URL, theme and old mappings preserved
 -- No RenderStepped / no permanent full-scan loop
 --========================================================
@@ -1056,6 +1056,407 @@ local T={
 
 }
 
+
+--========================================================
+-- BREAK AND STEAL AN EGG: ISOLATED MAP TRANSLATION PACK
+-- Never merged into legacy Steal an Egg dictionary.
+--========================================================
+local BREAK_STEAL_TEXT = {
+    ["Break and Steal an Egg"]="ทุบและขโมยไข่",
+    ["Auto Farm"]="ฟาร์มอัตโนมัติ",
+    ["Auto Farm Eggs"]="ฟาร์มไข่อัตโนมัติ",
+    ["Break Eggs (none = auto)"]="ไข่ที่จะทุบ (ไม่เลือก = อัตโนมัติ)",
+    ["Max Egg HP (0 = no limit)"]="พลังชีวิตไข่สูงสุด (0 = ไม่จำกัด)",
+    ["Target Priority"]="ลำดับความสำคัญของเป้าหมาย",
+    ["Luckiest"]="โชคสูงสุด",
+    ["Egg Cycle (Plasma Method)"]="วนฟาร์มไข่ (วิธีพลาสมา)",
+    ["Cycle Eggs"]="ไข่ที่ต้องการวนฟาร์ม",
+    ["Wait For Hatch"]="รอไข่ฟัก",
+    ["Movement"]="รูปแบบการเคลื่อนที่",
+    ["Walk Only"]="เดินเท่านั้น",
+    ["Steal Other Hatches"]="ขโมยไข่จากจุดฟักของผู้อื่น",
+    ["Only Steal Pen Upgrades"]="ขโมยเฉพาะสิ่งที่ช่วยอัปเกรดคอก",
+    ["Steal Filter"]="ตัวกรองการขโมย",
+    ["Pet Rarities (none = all)"]="ความหายากสัตว์เลี้ยง (ไม่เลือก = ทั้งหมด)",
+    ["Mutations (none = all)"]="การกลายพันธุ์ (ไม่เลือก = ทั้งหมด)",
+    ["Sizes (none = all)"]="ขนาด (ไม่เลือก = ทั้งหมด)",
+    ["Steal Above $/s"]="ขโมยที่มีรายได้มากกว่า $/วินาที",
+    ["Steal Below $/s (0 = no limit)"]="ขโมยที่มีรายได้ต่ำกว่า $/วินาที (0 = ไม่จำกัด)",
+    ["Also Steal Mutations"]="ขโมยตัวกลายพันธุ์ด้วย",
+    ["Mutated Rarities (none = all)"]="ระดับความหายากตัวกลายพันธุ์ (ไม่เลือก = ทั้งหมด)",
+    ["Mutated Steal Above $/s"]="ขโมยตัวกลายพันธุ์ที่มีรายได้มากกว่า $/วินาที",
+    ["Steals"]="รายการขโมย",
+    ["Recent"]="ล่าสุด",
+    ["Time"]="เวลา",
+    ["Animal"]="สัตว์เลี้ยง",
+    ["nothing stolen yet"]="ยังไม่ได้ขโมยอะไร",
+    ["Pickups: 0 hatching: 0"]="เก็บไข่: 0 | กำลังฟัก: 0",
+    ["Auto Place"]="วางสัตว์เลี้ยงอัตโนมัติ",
+    ["Auto Place Best"]="วางตัวที่ดีที่สุดอัตโนมัติ",
+    ["Place Best Now"]="วางตัวที่ดีที่สุดตอนนี้",
+    ["Auto Merge"]="ผสมอัตโนมัติ",
+    ["Animals"]="สัตว์เลี้ยง",
+    ["Auto Merge Selected"]="ผสมสัตว์ที่เลือกอัตโนมัติ",
+    ["Auto Merge All Eligible"]="ผสมสัตว์ทุกตัวที่เข้าเงื่อนไข",
+    ["Only Merge Below $/s (0 = no limit)"]="ผสมเฉพาะตัวที่มีรายได้ต่ำกว่า $/วินาที (0 = ไม่จำกัด)",
+    ["Only Merge Above $/s (0 = no limit)"]="ผสมเฉพาะตัวที่มีรายได้มากกว่า $/วินาที (0 = ไม่จำกัด)",
+    ["Sell Below $/s"]="ขายตัวที่มีรายได้ต่ำกว่า $/วินาที",
+    ["Sell Rarities (none = all)"]="ระดับความหายากที่จะขาย (ไม่เลือก = ทั้งหมด)",
+    ["Sell Mutations (none = all)"]="การกลายพันธุ์ที่จะขาย (ไม่เลือก = ทั้งหมด)",
+    ["Sell Sizes (none = all)"]="ขนาดที่จะขาย (ไม่เลือก = ทั้งหมด)",
+    ["Sell Now"]="ขายตอนนี้",
+    ["Sell Eggs Below $/s"]="ขายไข่ที่มีรายได้ต่ำกว่า $/วินาที",
+    ["Sell Egg Rarities (none = all)"]="ความหายากของไข่ที่จะขาย (ไม่เลือก = ทั้งหมด)",
+    ["Give To Friend"]="มอบให้เพื่อน",
+    ["Give"]="มอบให้",
+    ["Give Above $/s"]="มอบตัวที่มีรายได้มากกว่า $/วินาที",
+    ["Give Below $/s"]="มอบตัวที่มีรายได้ต่ำกว่า $/วินาที",
+    ["Collect Drops At My Base"]="เก็บของที่ดรอปในฐานฉัน",
+    ["Sync Merge Below + Steal Above To Pen"]="ผสมตัวมูลค่าต่ำและขโมยตัวมูลค่าสูงเข้าคอก",
+    ["Merge Priority"]="ลำดับความสำคัญในการผสม",
+    ["Most Copies"]="ตัวที่มีซ้ำมากที่สุด",
+    ["Merge eggs"]="ผสมไข่",
+    ["Auto Place + Hatch Eggs"]="วางและฟักไข่อัตโนมัติ",
+    ["Egg Place Priority"]="ลำดับความสำคัญในการวางไข่",
+    ["Best Egg"]="ไข่ที่ดีที่สุด",
+    ["Fuse Machine"]="เครื่องหลอมรวม",
+    ["Auto fuse"]="หลอมอัตโนมัติ",
+    ["Farm Fuse Pets"]="ฟาร์มสัตว์เลี้ยงสำหรับหลอม",
+    ["Auto Fuse (Needs 100B Speed)"]="หลอมอัตโนมัติ (ต้องมีความเร็ว 100B)",
+    ["Merge Predictor"]="คาดการณ์ผลการผสม",
+    ["No three alike to merge yet."]="ยังไม่มีสัตว์ชนิดเดียวกันครบ 3 ตัวเพื่อผสม",
+    ["Treadmill"]="ลู่วิ่ง",
+    ["Auto Treadmill"]="ลู่วิ่งอัตโนมัติ",
+    ["Auto Upgrade Treadmill"]="อัปเกรดลู่วิ่งอัตโนมัติ",
+    ["Pen upgrades"]="อัปเกรดคอก",
+    ["Auto Upgrade Pen"]="อัปเกรดคอกอัตโนมัติ",
+    ["Pickaxe"]="อีเต้อ",
+    ["Best pickaxe"]="อีเต้อที่ดีที่สุด",
+    ["Auto Buy + Equip Best Pickaxe"]="ซื้อและใช้อีเต้อที่ดีที่สุดอัตโนมัติ",
+    ["Trail"]="รอยวิ่ง",
+    ["Best trail"]="รอยวิ่งที่ดีที่สุด",
+    ["Auto Buy + Equip Best Trail"]="ซื้อและใช้รอยวิ่งที่ดีที่สุดอัตโนมัติ",
+    ["No trail owned"]="ยังไม่มีรอยวิ่ง",
+    ["Index"]="สมุดสะสม",
+    ["Auto Claim Index"]="รับรางวัลสมุดสะสมอัตโนมัติ",
+    ["Auto Complete Index"]="เก็บสมุดสะสมให้ครบอัตโนมัติ",
+    ["Bats"]="ไม้ตี",
+    ["Auto Claim Bats"]="รับไม้ตีอัตโนมัติ",
+    ["Auto Equip Best Bat"]="ใช้ไม้ตีที่ดีที่สุดอัตโนมัติ",
+    ["Egg Hunt"]="ตามล่าไข่",
+    ["Titanic Egg"]="ไข่ไททานิก",
+    ["Prioritize Titanic Egg"]="ให้ความสำคัญกับไข่ไททานิก",
+    ["Luckiest Eggs Here"]="ไข่ที่มีโชคสูงสุดในเซิร์ฟนี้",
+    ["Egg hop"]="ย้ายเซิร์ฟเวอร์หาไข่",
+    ["Server Hop For Eggs"]="ย้ายเซิร์ฟเวอร์เพื่อหาไข่",
+    ["Min Egg Luck (blank = any)"]="ค่าโชคไข่ขั้นต่ำ (เว้นว่าง = ทั้งหมด)",
+    ["Hop For Titanic Egg"]="ย้ายเซิร์ฟเวอร์หาไข่ไททานิก",
+    ["Protection"]="ระบบป้องกัน",
+    ["Stop Everything"]="หยุดทุกฟังก์ชัน",
+    ["Tutorial"]="บทสอนเล่น",
+    ["Auto Complete Tutorial"]="ทำบทสอนเล่นให้จบอัตโนมัติ",
+    ["Activity"]="กิจกรรมที่ทำ",
+    ["Job loop"]="วงจรการทำงาน",
+    ["idle"]="ว่าง",
+    ["ready"]="พร้อม",
+    ["No Effects"]="ปิดเอฟเฟกต์",
+    ["Server"]="เซิร์ฟเวอร์",
+    ["Copy Job ID"]="คัดลอกรหัสเซิร์ฟเวอร์",
+    ["Join Job ID"]="เข้าด้วยรหัสเซิร์ฟเวอร์",
+    ["paste a Job ID"]="วางรหัสเซิร์ฟเวอร์",
+    ["Join Server"]="เข้าเซิร์ฟเวอร์",
+    ["Rejoin"]="เข้าเซิร์ฟเวอร์ใหม่",
+    ["Webhook"]="เว็บฮุก",
+    ["URL Webhook"]="ลิงก์เว็บฮุก",
+    ["Discord User ID (optional)"]="Discord User ID (ไม่บังคับ)",
+    ["tag @everyone"]="แท็ก @everyone",
+    ["Merge Webhook"]="แจ้งเตือนเมื่อผสม",
+    ["Upgrade Webhook"]="แจ้งเตือนเมื่ออัปเกรด",
+    ["Kick Webhook"]="แจ้งเตือนเมื่อถูกเตะ",
+    ["Inventory Full Webhook"]="แจ้งเตือนเมื่อกระเป๋าเต็ม",
+    ["Send Test Message"]="ส่งข้อความทดสอบ",
+    ["Alert Filter"]="ตัวกรองการแจ้งเตือน",
+    ["Min Merge Result $/s (0 = every merge)"]="รายได้ขั้นต่ำหลังผสม $/วินาที (0 = ทุกครั้ง)",
+    ["Min Weight KG (0 = no limit)"]="น้ำหนักขั้นต่ำ KG (0 = ไม่จำกัด)",
+    ["Min Income $/s (0 = no limit)"]="รายได้ขั้นต่ำ $/วินาที (0 = ไม่จำกัด)",
+    ["Pet ESP"]="ESP สัตว์เลี้ยง",
+    ["Only Steal Filter Pets"]="แสดงเฉพาะสัตว์ที่ตรงตัวกรองขโมย",
+    ["Hatch Preview"]="ดูตัวอย่างก่อนฟัก",
+    ["Inventory ESP"]="ESP กระเป๋า",
+    ["Egg ESP"]="ESP ไข่",
+    ["Eggs (none = all)"]="ไข่ (ไม่เลือก = ทั้งหมด)",
+    ["Min Luck (blank = any)"]="ค่าโชคขั้นต่ำ (เว้นว่าง = ทั้งหมด)",
+    ["My Base ESP"]="ESP ฐานของฉัน",
+    ["Leaderboard"]="ตารางอันดับ",
+    ["Where You Stand"]="ตำแหน่งอันดับของคุณ",
+    ["Money board"]="ตารางอันดับรายได้",
+    ["Target"]="เป้าหมาย",
+    ["Next Rank"]="อันดับถัดไป",
+    ["When your eggs land"]="เมื่อไข่ของคุณเข้าฐาน",
+    ["Leaderboard Mode"]="โหมดตารางอันดับ",
+    ["Seeds"]="เมล็ดพันธุ์",
+    ["Seed"]="เมล็ดพันธุ์",
+    ["Hit"]="สำเร็จ",
+    ["Miss"]="พลาด",
+    ["Grows"]="เติบโต",
+    ["no Gold / Diamond to seed yet"]="ยังไม่มีทองหรือเพชรให้เพาะเมล็ด",
+    ["Rank"]="อันดับ",
+    ["Player"]="ผู้เล่น",
+    ["Income"]="รายได้",
+    ["Under 25B speed: trains when idle"]="ความเร็วต่ำกว่า 25B: ฝึกเมื่อว่าง",
+    ["Diamonds"]="เพชร",
+    ["Diamond Shop"]="ร้านค้าเพชร",
+    ["Auto Buy Best Plot Skin"]="ซื้อสกินฐานที่ดีที่สุดอัตโนมัติ",
+    ["Auto Buy Ride Eggs"]="ซื้อไข่พาหนะอัตโนมัติ",
+    ["Fence: none"]="รั้ว: ไม่มี",
+    ["Rides"]="พาหนะ",
+    ["Ride"]="ขี่พาหนะ",
+    ["Auto Ride Fastest Mount"]="ขี่พาหนะที่เร็วที่สุดอัตโนมัติ",
+    ["Not riding"]="ไม่ได้ขี่พาหนะ",
+    ["No rideables yet"]="ยังไม่มีพาหนะ",
+    ["Weather"]="สภาพอากาศ",
+    ["Hacker Takeover"]="แฮกเกอร์ยึดครอง",
+    ["Time Fracture"]="รอยแยกเวลา",
+    ["Voidfall"]="ห้วงว่างถล่ม",
+    ["Angelic Storm"]="พายุเทวทูต",
+    ["Thunderstorm"]="พายุฝนฟ้าคะนอง",
+    ["Blizzard"]="พายุหิมะ",
+    ["Next 12 hours"]="อีก 12 ชั่วโมงข้างหน้า",
+    ["Next Hacker Takeover"]="แฮกเกอร์ยึดครองครั้งถัดไป",
+    ["Next Time Fracture"]="รอยแยกเวลาครั้งถัดไป",
+    ["Next Voidfall"]="ห้วงว่างถล่มครั้งถัดไป",
+    ["Next Angelic Storm"]="พายุเทวทูตครั้งถัดไป",
+    ["Next Thunderstorm"]="พายุฝนฟ้าคะนองครั้งถัดไป",
+    ["Next Blizzard"]="พายุหิมะครั้งถัดไป",
+    -- New UI captions/choices visible in BF v1.1.9 (Break and Steal only).
+    ["Auto Sell"]="ขายอัตโนมัติ",
+    ["Auto Place Best Now"]="วางสัตว์เลี้ยงที่ดีที่สุดตอนนี้",
+    ["Auto Place + Hatch"]="วางและฟักไข่อัตโนมัติ",
+    ["Sell Eggs"]="ขายไข่",
+    ["Sell"]="ขาย",
+    ["Place"]="วาง",
+    ["Merge"]="ผสม",
+    ["Hatch"]="ฟักไข่",
+    ["Farm"]="ฟาร์ม",
+    ["Steal"]="ขโมย",
+    ["Auto"]="อัตโนมัติ",
+    ["Pickups"]="จำนวนที่เก็บ",
+    ["hatching"]="กำลังฟัก",
+    ["Carry"]="กำลังถือ",
+    ["Eggs broken"]="ไข่ที่ทุบแล้ว",
+    ["Damage"]="พลังโจมตี",
+    ["hits/s"]="ครั้ง/วินาที",
+    ["Pen"]="คอก",
+    ["no treadmill"]="ยังไม่มีลู่วิ่ง",
+    ["locked"]="ล็อกอยู่",
+    ["Speed power"]="พลังความเร็ว",
+    ["This session"]="รอบนี้",
+    ["Active"]="กำลังทำงาน",
+    ["Job ID"]="รหัสเซิร์ฟเวอร์",
+    ["Auto Rejoin"]="เข้าเซิร์ฟเวอร์ใหม่อัตโนมัติ",
+    ["Auto Reconnect"]="เชื่อมต่อใหม่อัตโนมัติ",
+    ["Auto Join New Server"]="ย้ายไปเซิร์ฟเวอร์ใหม่อัตโนมัติ",
+    ["Join New Server"]="เข้าเซิร์ฟเวอร์ใหม่",
+    ["Anti AFK"]="ป้องกันการหลุดเมื่อ AFK",
+    ["AFK Protection"]="ระบบป้องกันการหลุด AFK",
+    ["Max FPS"]="เพิ่ม FPS สูงสุด",
+    ["Maximize FPS"]="เพิ่ม FPS สูงสุด",
+    ["FPS Boost"]="เพิ่ม FPS",
+    ["Not riding yet"]="ยังไม่ได้ขี่พาหนะ",
+    ["No three alike to merge yet"]="ยังไม่มีสัตว์ชนิดเดียวกันครบ 3 ตัวเพื่อผสม",
+    ["Next fence"]="รั้วถัดไป",
+    ["None"]="ไม่มี",
+    ["All"]="ทั้งหมด",
+    ["None = All"]="ไม่เลือก = ทั้งหมด",
+    ["Upgrade"]="อัปเกรด",
+    ["Current"]="ปัจจุบัน",
+    ["Total"]="รวมทั้งหมด",
+    ["Session"]="รอบการเล่น",
+    ["Rows"]="รายการ",
+    ["Steals per hour"]="จำนวนที่ขโมยต่อชั่วโมง",
+    ["Diamonds per hour"]="เพชรต่อชั่วโมง",
+    ["Rarity"]="ความหายาก",
+    ["Mutations"]="การกลายพันธุ์",
+    ["Sizes"]="ขนาด",
+    ["Time until"]="เวลาเหลือ",
+    ["Gap"]="ส่วนต่าง",
+    ["ETA"]="เวลาที่คาดการณ์",
+    ["e.g. 100m, 1b, 30b"]="เช่น 100m, 1b, 30b",
+    ["e.g. 500t, 1qa"]="เช่น 500t, 1qa",
+    ["e.g. 10m, 1b"]="เช่น 10m, 1b",
+    ["e.g. 3"]="เช่น 3",
+    ["e.g. 5"]="เช่น 5",
+    ["0 sold for $0"]="ขายแล้ว 0 ตัว ได้เงิน $0",
+    ["0 fused"]="หลอมแล้ว 0 ตัว",
+    ["0 growing"]="กำลังเติบโต 0 ตัว",
+    ["0 claimed this session"]="รับรางวัลไปแล้ว 0 ครั้งในรอบนี้",
+    ["0 rows"]="0 รายการ",
+    ["past #100"]="อันดับต่ำกว่า 100",
+ }
+
+--========================================================
+-- V2.6.5 - BREAK AND STEAL AN EGG: POPUP / DROPDOWN OPTIONS
+-- Added separately from the LEGACY dictionary (T).
+-- Same English option is translated everywhere it appears in this map,
+-- including dynamically opened / duplicated dropdown menus.
+--========================================================
+local BREAK_STEAL_POPUP_TEXT = {
+    -- Size choices (farm filter, selling filter, ESP, etc.)
+    ["Normal"]="ปกติ",
+    ["Big"]="ใหญ่",
+    ["Huge"]="ใหญ่มาก",
+    ["Titanic"]="ไททานิก",
+
+    -- Mutations / variants (all corresponding dropdowns)
+    ["Gold"]="ทอง",
+    ["Golden"]="ทอง",
+    ["Diamond"]="เพชร",
+    ["Shiny"]="เปล่งประกาย",
+    ["Radioactive"]="กัมมันตรังสี",
+    ["Rainbow"]="เรนโบว์",
+    ["Lightning"]="สายฟ้า",
+    ["Frozen"]="เยือกแข็ง",
+    ["Angelic"]="เทวทูต",
+    ["Hacker"]="แฮกเกอร์",
+    ["Time"]="เวลา",
+    ["Void"]="ความว่างเปล่า",
+    ["Inferno"]="เพลิงนรก",
+    ["Omega"]="โอเมกา",
+    ["Spectral"]="วิญญาณ",
+    ["Ethereal"]="ไร้รูปกาย",
+    ["Primordial"]="ปฐมกาล",
+
+    -- Rarity choices that are also found in sell/merge/steal popups
+    ["Secret"]="ซีเคร็ต",
+    ["Celestial"]="เซเลสเชียล",
+    ["Common"]="ธรรมดา",
+    ["Uncommon"]="ไม่ธรรมดา",
+    ["Rare"]="แรร์",
+    ["Epic"]="อีพิก",
+    ["Legendary"]="เลเจนดารี",
+    ["Mythic"]="มิธิค",
+    ["Mythical"]="มิธิค",
+    ["Divine"]="ดีไวน์",
+    ["Eternal"]="อีเทอร์นัล",
+    ["Exclusive"]="เอ็กซ์คลูซีฟ",
+
+    -- Egg placement / merging order (repeated dropdown items)
+    ["Most Copies"]="ตัวที่มีซ้ำมากที่สุด",
+    ["Best Egg"]="ไข่ที่ดีที่สุด",
+    ["Fastest Egg"]="ไข่ที่เร็วที่สุด",
+    ["Rarest"]="หายากที่สุด",
+
+    -- Movement choices: keep TP/version identifiers recognizable
+    ["Walk Only"]="เดินเท่านั้น",
+    ["TP v1 (Risky)"]="วาร์ป TP v1 (เสี่ยง)",
+    ["TP v2 (Risky)"]="วาร์ป TP v2 (เสี่ยง)",
+    ["TP v1 (risky)"]="วาร์ป TP v1 (เสี่ยง)",
+    ["TP v2 (risky)"]="วาร์ป TP v2 (เสี่ยง)",
+}
+
+-- Merge only into the Break and Steal dictionary, NEVER into T.
+local BREAK_STEAL_POPUP_LOWER={}
+for english,thai in pairs(BREAK_STEAL_POPUP_TEXT) do
+    BREAK_STEAL_TEXT[english]=thai
+    BREAK_STEAL_POPUP_LOWER[string.lower(english)]=thai
+end
+
+local BREAK_STEAL_LOWER={}
+for english,thai in pairs(BREAK_STEAL_TEXT) do
+    BREAK_STEAL_LOWER[string.lower(english)]=thai
+end
+
+-- Only translations of the new game's changing status lines.
+local function TranslateBreakStealDynamic(raw)
+    -- Break and Steal v1.1.9 changing values: do not touch legacy maps.
+    local count, more = raw:match("^(%d+)%s+in the backpack%s+sells? under%s+(.+)$")
+    if count then return count.." ตัวในกระเป๋า | ขายตัวที่มีรายได้ต่ำกว่า "..more end
+    count,more=raw:match("^(%d+)%s+sold for%s+(.+)$")
+    if count then return "ขายแล้ว "..count.." ตัว | ได้เงิน "..more end
+    local incomes=raw:match("^Takes above%s+(.+)$")
+    if incomes then return "เก็บเฉพาะรายได้มากกว่า "..incomes end
+    local carried,damage,hits=raw:match("^Carry%s+(%d+/%d+)%s+damage%s+([^%s]+)%s+([^%s]+)%s+hits/s$")
+    if carried then return "กำลังถือ "..carried.." | โจมตี "..damage.." | "..hits.." ครั้ง/วินาที" end
+    local broken,hour=raw:match("^Eggs broken%s+(%d+)%s+(%S+)%s+an hour$")
+    if broken then return "ทุบไข่แล้ว "..broken.." ฟอง | "..hour.." ฟอง/ชั่วโมง" end
+    local diamonds,rate=raw:match("^Diamonds%s+(%S+)%s+(%S+)%s+an hour$")
+    if diamonds then return "เพชร "..diamonds.." | "..rate.." ต่อชั่วโมง" end
+    local speed,current=raw:match("^Speed power%s+(%S+)%s+%(%+(%S+)%s+this session%)$")
+    if speed then return "พลังความเร็ว "..speed.." (เพิ่ม "..current.." ในรอบนี้)" end
+    local treadmill,multi=raw:match("^[Nn]o treadmill%s+x(%S+)%s+%(locked%)$")
+    if treadmill then return "ยังไม่มีลู่วิ่ง | x"..treadmill.." (ยังล็อก)" end
+    local kind,num,attacks=raw:match("^(.-)%s+([%d%.]+)%s+damage%s+([%d%.]+)%s+hits/s$")
+    if kind then return kind.." | พลังโจมตี "..num.." | "..attacks.." ครั้ง/วินาที" end
+    local past=raw:match("^past%s+#(%d+)$")
+    if past then return "อันดับต่ำกว่า #"..past end
+    local gap=raw:match("^Gap:%s*(.+)$")
+    if gap then return "ส่วนต่าง: "..gap end
+    local eta=raw:match("^ETA:%s*(.+)$")
+    if eta then
+        eta=eta:gsub("and ~", "และประมาณ ")
+               :gsub("more variant giants", "ตัวระดับยักษ์พิเศษเพิ่มเติม")
+        return "เวลาประมาณ: "..eta
+    end
+    local income=raw:match("^Takes any pet over%s+(.+)%s+%(your pen's weakest%),%s*new ones too$")
+    if income then return "รับสัตว์เลี้ยงทุกตัวที่รายได้มากกว่า "..income.." (เทียบตัวที่รายได้น้อยสุดในคอก) รวมตัวใหม่ด้วย" end
+    local fence=raw:match("^Next fence:%s*(.+)$")
+    if fence then return "รั้วถัดไป: "..fence end
+    local hrs,mins,secs,state=raw:match("^(%d%d):(%d%d):(%d%d)%s+(%a+)$")
+    if hrs then
+        local states={ready="พร้อม", idle="ว่าง", running="กำลังทำงาน", waiting="กำลังรอ"}
+        local localized=states[string.lower(state)]
+        if localized then return hrs..":"..mins..":"..secs.." "..localized end
+    end
+    local sample=raw:match("^e%.g%.%s+(.+)$")
+    if sample then return "เช่น "..sample end
+    if raw:match("^[Nn]o three alike to merge yet%.?$") then
+        return "ยังไม่มีสัตว์ชนิดเดียวกันครบ 3 ตัวเพื่อผสม"
+    end
+    local n, h = raw:match("^Pen%s*(%d+)%s*/%s*(%d+)$")
+    if n then return "คอก "..n.."/"..h end
+    n,h = raw:match("^Pickups:%s*(%d+)%s+hatching:%s*(%d+)$")
+    if n then return "เก็บไข่: "..n.." | กำลังฟัก: "..h end
+    n,h = raw:match("^(%d+)%s+merged%s+(%d+)%s+eggs%s+hatched$")
+    if n then return "ผสมแล้ว "..n.." ครั้ง | ฟักไข่ "..h.." ฟอง" end
+    n,h = raw:match("^Machine needs%s+(.+)%s+speed%s+%(you:%s*(.+)%)$")
+    if n then return "เครื่องต้องการความเร็ว "..n.." (คุณมี "..h..")" end
+    n = raw:match("^next in%s+(.+)$")
+    if n then return "อีก "..n end
+    n = raw:match("^(%d+)%s+growing$")
+    if n then return "กำลังเติบโต "..n end
+    n = raw:match("^(%d+)%s+fused$")
+    if n then return "หลอมแล้ว "..n end
+    n = raw:match("^(%d+)%s+rows$")
+    if n then return n.." รายการ" end
+    n = raw:match("^(%d+)%s+claimed this session$")
+    if n then return "ได้รับในรอบนี้ "..n end
+    n = raw:match("^Job ID:%s*(.+)$")
+    if n then return "รหัสเซิร์ฟเวอร์: "..n end
+    n,h = raw:match("^(.+)%s+from the pen%s+weakest%s+(.+)$")
+    if n then return "รายได้จากคอก "..n.." | ตัวต่ำสุด "..h end
+    n,h = raw:match("^(.+)%s+damage%s+(.+)%s+hits/s$")
+    if n then return n.." ดาเมจ | "..h.." ครั้ง/วินาที" end
+    n,h = raw:match("^(.+)%s+%(Zone%s+(%d+),%s*(.-)%s+hp%)$")
+    if n then return nil end -- keep pet/egg names unchanged
+    local w=raw:match("^Next%s+(.+)$")
+    if w then
+        local names={
+            ["Hacker Takeover"]="แฮกเกอร์ยึดครอง",
+            ["Time Fracture"]="รอยแยกเวลา",
+            ["Voidfall"]="ห้วงว่างถล่ม",
+            ["Angelic Storm"]="พายุเทวทูต",
+            ["Thunderstorm"]="พายุฝนฟ้าคะนอง",
+            ["Blizzard"]="พายุหิมะ",
+        }
+        for en,thai in pairs(names) do
+            if w:sub(1,#en)==en then
+                return thai.." ครั้งถัดไป"..w:sub(#en+1)
+            end
+        end
+    end
+    return nil
+end
+
 --========================================================
 -- LOOKUP
 --========================================================
@@ -1539,7 +1940,7 @@ end
 -- TRANSLATE ONE LINE: ORIGINAL V2.4 ENGINE PRESERVED
 --========================================================
 
-local function TranslateLine(line)
+local function TranslateLine(line, mapMode)
     if type(line)~="string" or line=="" then
         return line
     end
@@ -1550,6 +1951,50 @@ local function TranslateLine(line)
 
     if c=="" then
         return line
+    end
+
+    -- Map-specific dictionary applies ONLY inside Break and Steal UI.
+    if mapMode=="BREAK_STEAL" then
+        local mapped=BREAK_STEAL_LOWER[string.lower(c)]
+        if mapped then return lead..mapped..tail end
+        local plainNew=c:gsub("<[^>]+>","")
+        mapped=BREAK_STEAL_LOWER[string.lower(plainNew)]
+        if mapped then
+            if plainNew~=c then
+                return lead..c:gsub(EscapePattern(plainNew),mapped,1)..tail
+            end
+            return lead..mapped..tail
+        end
+        mapped=TranslateBreakStealDynamic(plainNew)
+        if mapped then return lead..mapped..tail end
+
+        -- Multi-select dropdown summaries, e.g. "Gold, Rainbow" or "Big, Huge".
+        -- Convert only if EVERY piece is a known popup choice. Never rewrite
+        -- pet names, prices or arbitrary comma-separated status text.
+        if plainNew:find(",",1,true) then
+            local options={}
+            local optionCount=0
+            local valid=true
+            for piece in (plainNew..","):gmatch("(.-),") do
+                local choice=piece:match("^%s*(.-)%s*$")
+                local translated=BREAK_STEAL_POPUP_LOWER[string.lower(choice)]
+                if not translated then
+                    valid=false
+                    break
+                end
+                optionCount+=1
+                options[#options+1]=translated
+            end
+            if valid and optionCount>=2 then
+                local summary=table.concat(options,", ")
+                if plainNew~=c then
+                    return lead..c:gsub(EscapePattern(plainNew),function()
+                        return summary
+                    end,1)..tail
+                end
+                return lead..summary..tail
+            end
+        end
     end
 
     -- EXACT
@@ -2114,13 +2559,13 @@ end
 -- MULTI LINE
 --========================================================
 
-local function Translate(text)
+local function Translate(text, mapMode)
     if type(text)~="string" or text=="" then
         return text
     end
 
     if not text:find("\n",1,true) then
-        return TranslateLine(text)
+        return TranslateLine(text, mapMode)
     end
 
     local output={}
@@ -2128,7 +2573,7 @@ local function Translate(text)
     for line in (text.."\n"):gmatch("(.-)\n") do
         table.insert(
             output,
-            TranslateLine(line)
+            TranslateLine(line, mapMode)
         )
     end
 
@@ -2140,6 +2585,14 @@ end
 --========================================================
 
 local SIGNATURES={
+"auto farm eggs",
+"break eggs (none = auto)",
+"steal above $/s",
+"merge predictor",
+"titanic egg",
+"only merge below $/s",
+"steal other hatches",
+"auto buy best plot skin",
 "auto steal eggs",
 "auto capture egg",
 "contest flee range",
@@ -2167,6 +2620,12 @@ local SIGNATURES={
  "rare ufo vault",
  "steal from other players",
  "tween speed",
+"break eggs (none = auto)",
+"steal other hatches",
+"merge predictor",
+"luckiest eggs here",
+"where you stand",
+"auto place best",
 }
 
 local function IsBFSignature(text)
@@ -2256,6 +2715,46 @@ local function FindTopUIRoot(object)
 end
 
 --========================================================
+-- MAP SCOPE: distinguish Break and Steal an Egg from legacy maps
+-- No guessed game.PlaceId; identify the real BigFroot window by its labels.
+--========================================================
+local BREAK_STEAL_ANCHORS={
+    ["break eggs (none = auto)"]=true,
+    ["egg cycle (plasma method)"]=true,
+    ["only merge below $/s (0 = no limit)"]=true,
+    ["steal other hatches"]=true,
+    ["luckiest eggs here"]=true,
+    ["min egg luck (blank = any)"]=true,
+    ["no three alike to merge yet."]=true,
+    ["no three alike to merge yet"]=true,
+    ["merge predictor"]=true,
+    ["where you stand"]=true,
+    ["ทุบไข่ (ไม่เลือก = อัตโนมัติ)"]=true,
+    ["ไข่ที่จะทุบ (ไม่เลือก = อัตโนมัติ)"]=true,
+    ["วนฟาร์มไข่ (วิธีพลาสมา)"]=true,
+    ["ขโมยไข่จากจุดฟักของผู้อื่น"]=true,
+    ["ไข่ที่มีโชคสูงสุดในเซิร์ฟนี้"]=true,
+    ["คาดการณ์ผลการผสม"]=true,
+    ["ตำแหน่งอันดับของคุณ"]=true,
+}
+
+local function IsBreakStealAnchor(raw)
+    return type(raw)=="string"
+        and BREAK_STEAL_ANCHORS[string.lower(Clean(raw))]==true
+end
+
+local function DetectBFMapMode(root)
+    -- Strong, exclusive markers only. Generic labels such as 'Auto Sell',
+    -- 'Farm', 'Diamonds' are deliberately not enough to switch the map.
+    for _,o in ipairs(root:GetDescendants()) do
+        if IsText(o) and IsBreakStealAnchor(GetRawText(o)) then
+            return "BREAK_STEAL"
+        end
+    end
+    return "LEGACY"
+end
+
+--========================================================
 -- STATE
 --========================================================
 
@@ -2282,6 +2781,17 @@ local RootConnections=
         {},
         {__mode="k"}
     )
+
+local MapModeByRoot=setmetatable({}, {__mode="k"})
+local function ModeForTextObject(object)
+    local node=object
+    while node do
+        local mode=MapModeByRoot[node]
+        if mode then return mode end
+        node=node.Parent
+    end
+    return "LEGACY"
+end
 
 --========================================================
 -- CREDIT
@@ -2395,8 +2905,13 @@ local function ApplyText(object)
     local changed=false
 
     pcall(function()
+        local mode=ModeForTextObject(object)
+        -- Do not modify fields the user types into on the new map.
+        if mode=="BREAK_STEAL" and object:IsA("TextBox") then
+            return
+        end
         local old=object.Text
-        local new=Translate(old)
+        local new=Translate(old,mode)
 
         if old~=new then
             object.Text=new
@@ -2410,7 +2925,7 @@ local function ApplyText(object)
                 object.PlaceholderText
 
             local new=
-                Translate(old)
+                Translate(old, ModeForTextObject(object))
 
             if old~=new then
                 object.PlaceholderText=new
@@ -2487,6 +3002,7 @@ local function ApplyBFRoot(root)
     end
 
     ClaimedRoots[root]=true
+    MapModeByRoot[root]=DetectBFMapMode(root)
 
     if IsText(root) then
         ApplyText(root)
@@ -2547,6 +3063,13 @@ local function ApplyBFRoot(root)
                 if object
                     and object.Parent
                 then
+                    if MapModeByRoot[root]=="LEGACY"
+                        and IsBreakStealAnchor(GetRawText(object)) then
+                        MapModeByRoot[root]="BREAK_STEAL"
+                        for _,existingObject in ipairs(root:GetDescendants()) do
+                            if IsText(existingObject) then ApplyText(existingObject) end
+                        end
+                    end
                     ApplyText(object)
                     WatchText(object)
                 end
@@ -2568,6 +3091,7 @@ local function ApplyBFRoot(root)
                 end)
 
                 ClaimedRoots[root]=nil
+                MapModeByRoot[root]=nil
                 RootConnections[root]=nil
             end
         end)
@@ -2576,6 +3100,25 @@ local function ApplyBFRoot(root)
         descendantConnection,
         ancestryConnection
     }
+
+    -- The new game's UI may initially expose only its title.
+    -- Detect its map pack again once the menu pages have appeared.
+    if MapModeByRoot[root]=="LEGACY" then
+        for _,delaySeconds in ipairs({1.2, 4, 8}) do
+            task.delay(delaySeconds,function()
+                if not root or not root.Parent
+                    or MapModeByRoot[root]~="LEGACY" then
+                    return
+                end
+                if DetectBFMapMode(root)=="BREAK_STEAL" then
+                    MapModeByRoot[root]="BREAK_STEAL"
+                    for _,o in ipairs(root:GetDescendants()) do
+                        if IsText(o) then ApplyText(o) end
+                    end
+                end
+            end)
+        end
+    end
 
     print(
         "✅ BF UI detected | Thai translation active"
@@ -2674,6 +3217,13 @@ local function CheckNewText(object)
         if object==root
             or object:IsDescendantOf(root)
         then
+            if MapModeByRoot[root]=="LEGACY"
+                and IsBreakStealAnchor(text) then
+                MapModeByRoot[root]="BREAK_STEAL"
+                for _,existingObject in ipairs(root:GetDescendants()) do
+                    if IsText(existingObject) then ApplyText(existingObject) end
+                end
+            end
             ApplyText(object)
             WatchText(object)
             return
@@ -2798,7 +3348,7 @@ end
 --========================================================
 
 print(
-    "✅ ZIGZAG BF Translator V2.6.2 UFO BAT armed"
+    "✅ ZIGZAG BF Translator V2.6.5 TWO MAP POPUP THAI armed"
 )
 
 --========================================================
@@ -2886,7 +3436,7 @@ task.delay(
                 "SendNotification",
                 {
                     Title="🥭 BigFroot ภาษาไทย",
-                    Text="ZIGZAG V2.6.2 | BF v2.0.1 UFO + Bat",
+                    Text="ZIGZAG V2.6.5 | Multi-Map + Popup Thai",
                     Duration=5
                 }
             )
@@ -2899,7 +3449,7 @@ task.delay(
 --========================================================
 
 print("========================================")
-print("✅ BIGFROOT THAI - ZIGZAG V2.6.2 UFO BAT FULL MERGED")
+print("✅ BIGFROOT THAI - ZIGZAG V2.6.5 TWO MAP + DROPDOWN THAI FULL MERGED")
 print("✅ WORKING V2.5.2 BASE PRESERVED")
 print("✅ V2.4 TRANSLATOR ENGINE PRESERVED")
 print("✅ BFLoader INCLUDED")
@@ -2931,6 +3481,8 @@ print("✅ PLOT CENTER = กลางฐาน")
 print("✅ PEN AREA = พื้นที่คอก")
 print("✅ START AREA = พื้นที่เริ่มต้น")
 print("✅ 1ST AREA = พื้นที่แรก (ไม่ต้องเคลม)")
+print("✅ BREAK AND STEAL: POPUP DROPDOWN CHOICES TRANSLATED IN EVERY COPY")
+print("✅ LEGACY STEAL AN EGG DICTIONARY UNCHANGED")
 print("✅ NO RENDERSTEPPED TRANSLATION")
 print("✅ NO PERMANENT FULL SCAN")
 print("========================================")
